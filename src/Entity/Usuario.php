@@ -26,8 +26,8 @@ class Usuario implements UserInterface
     /**
      * @ORM\Column(type="string", length=9)
      * @Assert\Regex(
-     *     pattern="/^[XYZ]?([0-9]{7,8})([A-Z])$/i",
-     *     match=false,
+     *     pattern="/^[XYZ]?([0-9]{7,8})([A-Z])$/",
+     *     match=true,
      *     message="El nif no es válido"
      * )
      */
@@ -50,7 +50,7 @@ class Usuario implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\Regex(
      *     pattern="/^(?=.{6,20})(?=(?:.*\d){2,})(?=.*[A-Z]+).*$/gm",
-     *     match=false,
+     *     match=true,
      *     message="La contraseña debe tener mínimo 6 caractéres, 2 numeros y un caracter en mayúscula"
      * )
      */
