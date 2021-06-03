@@ -30,6 +30,7 @@ class Turno
 
     /**
      * @ORM\OneToOne(targetEntity=Evento::class, mappedBy="turno", cascade={"persist", "remove"})
+     * @ORM\Column (nullable=false)
      */
     private $evento;
 

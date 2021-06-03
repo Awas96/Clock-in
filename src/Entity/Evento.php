@@ -23,10 +23,6 @@ class Evento
      */
     private $fecha;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Fichaje::class, inversedBy="evento", cascade={"persist", "remove"})
-     */
-    private $fichaje;
 
     /**
      * @ORM\OneToOne(targetEntity=Turno::class, inversedBy="evento", cascade={"persist", "remove"})
@@ -42,6 +38,12 @@ class Evento
      * @ORM\ManyToOne(targetEntity=Usuario::class, inversedBy="evento")
      */
     private $usuario;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Fichaje::class, inversedBy="evento", cascade={"persist", "remove"})
+     */
+    private $fichaje;
+
 
     public function getId(): ?int
     {

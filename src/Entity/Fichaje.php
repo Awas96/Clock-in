@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FichajeRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,8 +18,44 @@ class Fichaje
      */
     private $id;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $hora;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Evento::class, mappedBy="fichaje", cascade={"persist", "remove"})
+     * @ORM\Column (nullable="false")
+     */
+    private $evento;
+
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getEvento(): ?Evento
+    {
+        return $this->evento;
+    }
+
+    public function setEvento(Evento $evento): self
+    {
+        $this->evento = $evento;
+
+        return $this;
+    }
+
+    public function getHora(): ?DateTimeInterface
+    {
+        return $this->hora;
+    }
+
+    public function setHora(DateTimeInterface $hora): self
+    {
+        $this->hora = $hora;
+
+        return $this;
     }
 }

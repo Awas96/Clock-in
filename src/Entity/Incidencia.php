@@ -35,6 +35,7 @@ class Incidencia
 
     /**
      * @ORM\OneToOne(targetEntity=Evento::class, mappedBy="incidencia", cascade={"persist", "remove"})
+     * @ORM\Column (nullable=false)
      */
     private $evento;
 
