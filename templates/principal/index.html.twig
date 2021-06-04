@@ -1,33 +1,20 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block title %}Hello PrincipalController!{% endblock %}
+{% block estilos %}
+    <link rel="stylesheet" href="{{ asset('css/portada.css') }}">
+{% endblock %}
 
-{% block body %}
-    <style>
-        .example-wrapper {
-            margin: 1em auto;
-            max-width: 800px;
-            width: 95%;
-            font: 18px/1.5 sans-serif;
-        }
 
-        .example-wrapper code {
-            background: #F5F5F5;
-            padding: 2px 6px;
-        }
-    </style>
 
-    <div class="example-wrapper">
-        <h1>Hello {{ controller_name }}! ✅</h1>
+{% block title %}Carta{% endblock %}
 
-        This friendly message is coming from:
-        <ul>
-            <li>Your controller at <code><a
-                            href="{{ '/home/awas/PhpstormProjects/Clock-In/src/Controller/PrincipalController.php'|file_link(0) }}">src/Controller/PrincipalController.php</a></code>
-            </li>
-            <li>Your template at <code><a
-                            href="{{ '/home/awas/PhpstormProjects/Clock-In/templates/principal/index.html.twig'|file_link(0) }}">templates/principal/index.html.twig</a></code>
-            </li>
-        </ul>
-    </div>
+{% block content %}
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+
+    {% else %}
+        {% include 'principal/portada_login.partial.html.twig' %}
+     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
 {% endblock %}

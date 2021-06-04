@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    {% block estilos %} {% endblock %}
+{% endblock %}
+{% block body %}
+
+    {% block cabecera %}
+        <nav class="header_color">
+            <div class="display_flex header">
+                <a href="{{ path('index') }}">
+                    <img class="header_image" src="{{ asset('img/logo.png') }}">
+                </a>
+                <div class="header_texto">
+                    <h1 class="font-weight-bolder texto_mas_grande"> Clock In </h1>
+                    <h2 class="texto_cursivo texto_grande"> Aplicación de gestion de fichajes </h2>
+                </div>
+            </div>
+        </nav>
+    {% endblock cabecera %}
+    <div class="contenido">
+        {% block content %}{% endblock content %}
+    </div>
+    {% block footer %}
+        <footer class="header_color p-4 ">
+            <div class="display_flex justify-content-around">
+                <span>Jose Antonio Roselló Lopez</span>
+
+
+                </span>
+            </div>
+        </footer>
+    {% endblock footer %}
+
+{% endblock body %}
