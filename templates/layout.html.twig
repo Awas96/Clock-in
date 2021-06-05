@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
     <link rel="stylesheet" href="{{ asset('css/base.css') }}">
     <link rel="stylesheet" href="{{ asset('css/cabecera.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pie.css') }}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     {% block estilos %} {% endblock %}
@@ -11,7 +12,7 @@
 
     {% block cabecera %}
         <nav class="header_color">
-            <div class="display_flex header">
+            <div class="header">
                 <a href="{{ path('index') }}">
                     <img class="header_image" src="{{ asset('img/logo.png') }}">
                 </a>
@@ -26,12 +27,10 @@
         {% block content %}{% endblock content %}
     </div>
     {% block footer %}
-        <footer class="header_color p-4 ">
-            <div class="display_flex justify-content-around">
-                <span>Jose Antonio Roselló Lopez</span>
-
-
-                </span>
+        <footer class="footer footer_color">
+            <div class="footer_texto">
+                <p>Jose Antonio Roselló Lopez</p>
+                <p>IES Oretania 2021</p>
             </div>
         </footer>
     {% endblock footer %}

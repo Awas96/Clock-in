@@ -11,31 +11,46 @@
         text-align: center;
 }
 
-.portada_titulo {
-        padding-top: 0.5em;
-        padding-bottom: 0.5em;
-        margin: 0 auto;
-        text-align: center;
-}
-
-.portada_cuerpo {
+.portada_pnlUsuario_imagen {
+        margin-top: 1em;
+        margin-bottom: 1em;
         align-self: center;
+}
+
+.portada_pnlUsuario_imagen figure img {
+        width: 10rem;
+}
+
+.portada_pnlUsuario_imagen figcaption {
+        margin-top: 1em;
+        margin-bottom: 1em;
+}
+
+.portada_pnlUsuario_datos {
         width: 80%;
+        text-align: justify;
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        line-height: 2em;
+
 }
 
-.portada_fondo {
-        background-color: rgba(100, 100, 100, 0.2);
-        border-radius: 7px;
-        padding: 1em;
+.portada_pnlUsuario_controls {
+        width: 80%;
+        text-align: justify;
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        line-height: 2em;
+
 }
 
-.portada_imagen {
-        background-image: radial-gradient(circle, royalblue 60%, rgba(0, 0, 0, 0.07) 100%);
-        border-radius: 100%;
-        padding: 1em;
-        margin-bottom: 1em;
+.portada_pnlUsuario_controls a, .portada_pnlUsuario_controls button {
+        margin-bottom: 0.3rem;
+
 }
 
-.portada_descripcion h4, .portada_descripcion p {
-        margin-bottom: 1em;
+.portada_pnlCuerpo_seccion {
+
 }

@@ -2,6 +2,7 @@
 
 {% block estilos %}
     <link rel="stylesheet" href="{{ asset('css/portada.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashpanel.css') }}">
 {% endblock %}
 
 
@@ -9,11 +10,54 @@
 {% block title %}Carta{% endblock %}
 
 {% block content %}
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-
-    {% else %}
-        {% include 'principal/portada_login.partial.html.twig' %}
-     {% endif %}
+    <div class="dpMain">
+        <div id="loggeduser" class="dpleft portada_pnlUsuario">
+            <div id="userimage" class="portada_pnlUsuario_imagen">
+                <figure class=" text-center">
+                    <img src="{{ asset('img/logo.png') }}">
+                    <figcaption>{{ app.user.username }}</figcaption>
+                </figure>
+            </div>
+            <div id="userdata" class="portada_pnlUsuario_datos">
+                <p>Nif: {{ app.user.nif }}</p>
+                <p>Email: {{ app.user.email }}</p>
+                <p>Rol: {{ app.user.roles | first }}</p>
+            </div>
+            <div id="controls" class="portada_pnlUsuario_controls">
+                <p> Controles:</p>
+                <a href="{{ path('app_logout') }}" class="btn btn-warning">Desconectar</a>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+                <button class="btn btn-warning">Click me!</button>
+            </div>
+        </div>
+        <div class="dpright">
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="dpbody portada_pnlCuerpo_seccion">
+                    <h2>Panel Admin</h2>
+                </div>
+            {% endif %}
+            {% if is_granted('ROLE_MODERADOR') %}
+                <div class="dpbody">
+                    <h2>Panel Moderador</h2>
+                </div>
+            {% endif %}
+            {% if is_granted('ROLE_EMPLEADO') %}
+                <div class="dpbody">
+                    <h2>Panel Empleado</h2>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

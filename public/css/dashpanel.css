@@ -1,0 +1,28 @@
+.dpMain {
+
+    display: flex;
+    min-height: calc(100vh - 6em);
+
+}
+
+.dpleft {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 15em;
+    width: 15%;
+    background-color: rgba(0, 0, 0, 0.2);
+
+}
+
+.dpright {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+}
+
+.dpbody {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    background-color: rgba(0, 0, 0, 0.1);
+}
