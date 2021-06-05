@@ -62,14 +62,14 @@ class Usuario implements UserInterface
     private $roles = 1;
 
     /**
-     * @ORM\OneToMany(targetEntity=Evento::class, mappedBy="usuario")
-     */
-    private $evento;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Evento::class, mappedBy="usuario", orphanRemoval=true)
+     */
+    private $evento;
 
     public function __construct()
     {
@@ -142,7 +142,9 @@ class Usuario implements UserInterface
                 array_push($role, 'ROLE_EMPLEADO');
                 break;
             case 0:
-                $role = ["ROLE_ADMINISTRADOR"];
+                array_push($role, 'ROLE_ADMIN');
+                array_push($role, 'ROLE_MODERADOR');
+                array_push($role, 'ROLE_EMPLEADO');
                 break;
         }
 
@@ -154,37 +156,6 @@ class Usuario implements UserInterface
     {
 
         $this->roles = $roles;
-
-        return $this;
-    }
-
-
-    /**
-     * @return Collection|Evento[]
-     */
-    public function getEvento(): Collection
-    {
-        return $this->evento;
-    }
-
-    public function addEvento(Evento $evento): self
-    {
-        if (!$this->evento->contains($evento)) {
-            $this->evento[] = $evento;
-            $evento->setUsuario($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvento(Evento $evento): self
-    {
-        if ($this->evento->removeElement($evento)) {
-            // set the owning side to null (unless already changed)
-            if ($evento->getUsuario() === $this) {
-                $evento->setUsuario(null);
-            }
-        }
 
         return $this;
     }
@@ -214,5 +185,35 @@ class Usuario implements UserInterface
     public function getIsVerified(): ?bool
     {
         return $this->isVerified;
+    }
+
+    /**
+     * @return Collection|Evento[]
+     */
+    public function getEvento(): Collection
+    {
+        return $this->evento;
+    }
+
+    public function addEvento(Evento $evento): self
+    {
+        if (!$this->evento->contains($evento)) {
+            $this->evento[] = $evento;
+            $evento->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvento(Evento $evento): self
+    {
+        if ($this->evento->removeElement($evento)) {
+            // set the owning side to null (unless already changed)
+            if ($evento->getUsuario() === $this) {
+                $evento->setUsuario(null);
+            }
+        }
+
+        return $this;
     }
 }

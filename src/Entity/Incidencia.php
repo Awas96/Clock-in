@@ -33,11 +33,6 @@ class Incidencia
      */
     private $hora;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Evento::class, mappedBy="incidencia", cascade={"persist", "remove"})
-     * @ORM\Column (nullable=false)
-     */
-    private $evento;
 
     public function getId(): ?int
     {
@@ -80,25 +75,4 @@ class Incidencia
         return $this;
     }
 
-    public function getEvento(): ?Evento
-    {
-        return $this->evento;
-    }
-
-    public function setEvento(?Evento $evento): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($evento === null && $this->evento !== null) {
-            $this->evento->setIncidencia(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($evento !== null && $evento->getIncidencia() !== $this) {
-            $evento->setIncidencia($this);
-        }
-
-        $this->evento = $evento;
-
-        return $this;
-    }
 }

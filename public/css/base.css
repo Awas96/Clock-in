@@ -5,7 +5,7 @@ body {
 
 .contenido {
     height: 100%;
-    min-height: 85vh;
+    min-height: Calc(100vh - 6em);
 }
 
 
@@ -15,74 +15,4 @@ body {
     border: 1px solid black;
 }
 
-.limpar_formato {
-    color: white;
-    list-style: none;
-    font-style: normal;
-}
 
-.letra_dorada {
-    color: #ab9659;
-}
-
-.cursor {
-    cursor: pointer;
-}
-
-.display_flex {
-    display: flex;
-}
-
-.texto_ligero {
-    font-weight: lighter;
-}
-
-.texto_cursivo {
-    font-style: italic;
-}
-
-.texto_grueso {
-    font-weight: bold;
-}
-
-.texto_pequenio {
-    font-size: 0.8em;
-}
-
-.texto_mas_pequenio {
-    font-size: 0.5em;
-}
-
-.texto_normal {
-    font-size: 1em;
-}
-
-.texto_grande {
-    font-size: 1.7em;
-}
-
-.texto_opaco {
-    color: rgba(0, 0, 0, 0.5);
-}
-
-.texto_mas_grande {
-    font-size: 2em;
-}
-
-.margen_abajo {
-    margin-bottom: 0.5em;
-}
-
-.margen_arriba {
-    margin-top: 0.5em;
-}
-
-.underline {
-    text-decoration: underline;
-}
-
-.botones {
-    display: flex;
-    justify-content: space-around;
-    border-radius: 10px;
-}

@@ -23,13 +23,6 @@ class Fichaje
      */
     private $hora;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Evento::class, mappedBy="fichaje", cascade={"persist", "remove"})
-     * @ORM\Column (nullable="false")
-     */
-    private $evento;
-
-
     public function getId(): ?int
     {
         return $this->id;

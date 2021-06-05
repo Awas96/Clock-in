@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\TurnoRepository;
+use App\Repository\TurnosPredefinidosRepository;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=TurnoRepository::class)
+ * @ORM\Entity(repositoryClass=TurnosPredefinidosRepository::class)
  */
-class Turno
+class TurnosPredefinidos
 {
     /**
      * @ORM\Id
@@ -21,12 +21,12 @@ class Turno
     /**
      * @ORM\Column(type="datetime")
      */
-    private $horaInicio;
+    private $hora_inicio;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $horaFin;
+    private $hora_Fin;
 
     public function getId(): ?int
     {
@@ -35,27 +35,25 @@ class Turno
 
     public function getHoraInicio(): ?DateTimeInterface
     {
-        return $this->horaInicio;
+        return $this->hora_inicio;
     }
 
-    public function setHoraInicio(DateTimeInterface $horaInicio): self
+    public function setHoraInicio(DateTimeInterface $hora_inicio): self
     {
-        $this->horaInicio = $horaInicio;
+        $this->hora_inicio = $hora_inicio;
 
         return $this;
     }
 
     public function getHoraFin(): ?DateTimeInterface
     {
-        return $this->horaFin;
+        return $this->hora_Fin;
     }
 
-    public function setHoraFin(DateTimeInterface $horaFin): self
+    public function setHoraFin(DateTimeInterface $hora_Fin): self
     {
-        $this->horaFin = $horaFin;
+        $this->hora_Fin = $hora_Fin;
 
         return $this;
     }
-
-
 }
