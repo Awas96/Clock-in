@@ -5,8 +5,6 @@
     <link rel="stylesheet" href="{{ asset('css/dashpanel.css') }}">
 {% endblock %}
 
-
-
 {% block title %}Carta{% endblock %}
 
 {% block content %}
@@ -26,34 +24,35 @@
             <div id="controls" class="portada_pnlUsuario_controls">
                 <p> Controles:</p>
                 <a href="{{ path('app_logout') }}" class="btn btn-warning">Desconectar</a>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
-                <button class="btn btn-warning">Click me!</button>
             </div>
         </div>
-        <div class="dpright">
+        <div class="dpright portada_pnlCuerpo">
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="dpbody portada_pnlCuerpo_seccion">
-                    <h2>Panel Admin</h2>
+                    <h2 class="portada_titulo"><i class="fas fa-user-shield"></i> Panel Admin</h2>
+                    <div class="portada_pnlCuerpo_botonera">
+                        <button class="btn btn-light"> Gestionar Usuarios</button>
+                    </div>
                 </div>
             {% endif %}
-            {% if is_granted('ROLE_MODERADOR') %}
-                <div class="dpbody">
-                    <h2>Panel Moderador</h2>
+            {% if is_granted('ROLE_GESTOR') %}
+                <div class="dpbody portada_pnlCuerpo_seccion">
+                    <h2 class="portada_titulo"><i class="fas fa-user-cog"></i> Panel Moderador</h2>
+                    <div class="portada_pnlCuerpo_botonera">
+                        <button class="btn btn-light"> Gestionar Horarios</button>
+                        <button class="btn btn-light"> Crear Plantilla Horarios</button>
+                        <button class="btn btn-light"> Ver histórico de fichajes</button>
+                    </div>
                 </div>
             {% endif %}
             {% if is_granted('ROLE_EMPLEADO') %}
-                <div class="dpbody">
-                    <h2>Panel Empleado</h2>
+                <div class="dpbody portada_pnlCuerpo_seccion">
+                    <h2 class="portada_titulo"><i class="fas fa-user"></i> Panel Empleado</h2>
+                    <div class="portada_pnlCuerpo_botonera">
+                        <button class="btn btn-light"> Ver Horario</button>
+                        <button class="btn btn-light"> Fichar</button>
+                        <button class="btn btn-light"> Ver histórico de fichajes</button>
+                    </div>
                 </div>
             {% endif %}
         </div>

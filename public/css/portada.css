@@ -11,6 +11,12 @@
         text-align: center;
 }
 
+.portada_titulo {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+}
+
 .portada_pnlUsuario_imagen {
         margin-top: 1em;
         margin-bottom: 1em;
@@ -24,6 +30,11 @@
 .portada_pnlUsuario_imagen figcaption {
         margin-top: 1em;
         margin-bottom: 1em;
+}
+
+.portada_pnlCuerpo {
+        height: 100%;
+
 }
 
 .portada_pnlUsuario_datos {
@@ -52,5 +63,10 @@
 }
 
 .portada_pnlCuerpo_seccion {
+        margin: 2em;
+
+}
+
+.portada_pnlCuerpo_botonera {
 
 }

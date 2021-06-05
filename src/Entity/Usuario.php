@@ -135,7 +135,7 @@ class Usuario implements UserInterface
         $role = [];
         switch ($rol) {
             case 1:
-                array_push($role, 'ROLE_MODERADOR');
+                array_push($role, 'ROLE_GESTOR');
                 array_push($role, 'ROLE_EMPLEADO');
                 break;
             case 2:
@@ -143,7 +143,7 @@ class Usuario implements UserInterface
                 break;
             case 0:
                 array_push($role, 'ROLE_ADMIN');
-                array_push($role, 'ROLE_MODERADOR');
+                array_push($role, 'ROLE_GESTOR');
                 array_push($role, 'ROLE_EMPLEADO');
                 break;
         }

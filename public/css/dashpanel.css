@@ -16,13 +16,12 @@
 }
 
 .dpright {
-    display: flex;
-    flex-direction: column;
     width: 85%;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .dpbody {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-    background-color: rgba(0, 0, 0, 0.1);
+
 }
