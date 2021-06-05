@@ -1,28 +1,38 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Registrar Usuario{% endblock %}
 
-{% block body %}
+{% block estilos %}
+    <link rel="stylesheet" href="{{ asset('css/portada.css') }}">
+
+{% endblock %}
+
+{% block content %}
     {% for flashError in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
-
-    <h1>Register</h1>
-
-    {{ form_start(registrationForm) }}
-    {{ form_row(registrationForm.username, {
-        label: 'Nombre de usuario: '
-    }) }}
-    {{ form_row(registrationForm.nif, {
-        label: 'NIF: '
-    }) }}
-    {{ form_row(registrationForm.email, {
-        label: 'Email: '
-    }) }}
-    {{ form_row(registrationForm.Password, {
-        label: 'Contraseña: '
-    }) }}
-
-    <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+    <div class="portada mt-3">
+        <h1>Registrar Usuario</h1>
+        <div class="portada_cuerpo">
+            <div class="portada_fondo ">
+                {{ form_start(registrationForm) }}
+                {{ form_row(registrationForm.username, {
+                    label: 'Nombre de usuario: '
+                }) }}
+                {{ form_row(registrationForm.nif, {
+                    label: 'NIF: '
+                }) }}
+                {{ form_row(registrationForm.email, {
+                    label: 'Email: '
+                }) }}
+                {{ form_row(registrationForm.Password, {
+                    label: 'Contraseña: '
+                }) }}
+            </div>
+            <div class="p-3">
+                <button type="submit" class="btn btn-primary">Registrar</button>
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
