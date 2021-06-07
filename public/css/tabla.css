@@ -1,0 +1,48 @@
+.container {
+    margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    width: 100%;
+    margin-top: 40px;
+    padding: 0 10px;
+}
+
+.col {
+
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.panel-heading {
+    display: flex;
+    text-align: center;
+    padding: 1em;
+    background-color: #3769dc;
+    color: white;
+    width: 100%;
+}
+
+.panel-heading div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+}
+
+.panel-body {
+    display: none;
+}
+
+.panel_tabla_tupla_editar td, th {
+    vertical-align: middle !important;
+    text-align: center;
+}
+

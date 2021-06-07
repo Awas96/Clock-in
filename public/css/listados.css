@@ -1,0 +1,14 @@
+.listados {
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.listados_titulo {
+    font-size: 2em;
+}
+
+.listados_tabla {
+    width: 50%;
+}

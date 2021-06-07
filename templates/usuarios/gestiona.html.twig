@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+
+{% block estilos %}
+    <link rel="stylesheet" href="{{ asset('css/listados.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tabla.css') }}">
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/tabla.js') }}"
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1 class="listados_titulo">Gestionar Usuarios</h1>
+        <div class="row">
+            <div class="col">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div><h3 class="panel-title">Usuarios</h3></div>
+                        <div class="pull-right">
+							<span class="clickable filter" data-toggle="tooltip" title="Toggle table filter"
+                                  data-container="body">
+								<i class="fas fa-filter"></i>
+							</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <input type="text" class="form-control" id="dev-table-filter" data-action="filter"
+                               data-filters="#dev-table" placeholder="Filtrar por NIF"/>
+                    </div>
+                    <div class="panel-table">
+                        {% include 'usuarios/usuarios_tabla.partial.html.twig' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block title %}
+    Gestión de usuarios
+{% endblock %}
+
