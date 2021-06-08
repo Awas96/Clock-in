@@ -6,6 +6,10 @@
     width: 100%;
 }
 
+.table {
+    border-radius: 3px;
+}
+
 .row {
     display: flex;
     width: 100%;

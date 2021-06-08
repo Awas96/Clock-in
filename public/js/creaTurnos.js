@@ -1,13 +1,12 @@
-$(function () {
+$('#btnCrea').on('click', function () {
+   let div = $('.creaTurnos_panel');
+   toggle(div)
+});
 
-   $('#btnCrea').on('click', function (e) {
-      var $this = $(this),
-          $panel = $this.parents('.creaTurnos_panel');
-
-      $panel.find('.tuplaEscondida').slideToggle();
-      if ($this.css('display') != 'none') {
-         $panel.find('.tuplaEscondida').focus();
-      }
-   });
-   $('[data-toggle="tooltip"]').tooltip();
-})
+function toggle(div) {
+   if ($(div).is(':visible')) {
+      $(div).slideToggle(200);
+   } else {
+      $(div).slideToggle(300);
+   }
+}

@@ -1,8 +1,10 @@
 .creaTurnos_panel {
     padding-top: 1em;
     padding-bottom: 1em;
-    border: 1px solid black;
-   align-content: center;
+    border: 1px solid gray;
+    border-radius: 3px;
+    align-content: center;
+    margin-bottom: 1em;
 }
 
 .creaTurnos_panel div {
@@ -19,5 +21,21 @@
 .creaTurnos_panel input {
     align-self: center;
     height: 2rem;
-    width: 90%;
+    width: 50%;
+    margin-bottom: 1em;
+}
+
+.creaTurnos_panel {
+    display: none;
+}
+
+.creaTurnos_inputs {
+    align-content: center;
+    align-content: center;
+    flex-direction: column;
+    margin-top: 1em;
+}
+
+.creaTurnos_inputs label {
+    align-self: center;
 }
