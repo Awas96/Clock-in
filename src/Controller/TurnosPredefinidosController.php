@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Turno;
 use App\Entity\TurnosPredefinidos;
 use App\Repository\TurnosPredefinidosRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,19 +39,20 @@ class TurnosPredefinidosController extends AbstractController
             dump($content);
             if (!empty($content)) {
 
-                    $params = json_decode($content, true);
+                $params = json_decode($content, true);
 
-                    dump($params['HoraInicio']);
-                    dump($params['HoraFin']);
-                    $em = $this->getDoctrine()->getManager();
-                    $turno = new TurnosPredefinidos();
-                    $turno->setHoraInicio($params['HoraInicio']);
-                    $turno->setHoraInicio($params['HoraFin']);
-                    $em->persist($turno);
-                    $em->flush();
+                $inicio = new Datetime(date('h:i', strtotime($params['HoraInicio'])));
+                $fin = new Datetime(date('h:i', strtotime($params['HoraFin'])));
+                dump($params['HoraFin']);
+                $em = $this->getDoctrine()->getManager();
+                $turno = new TurnosPredefinidos();
+                $turno->setHoraInicio($inicio);
+                $turno->setHoraFin($fin);
+                $em->persist($turno);
+                $em->flush();
 
             }
-            return new JsonResponse(array('data' => $params));
+            return new JsonResponse($turno->getId());
         }
         return new Response('Error!', 400);
     }

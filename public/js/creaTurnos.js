@@ -20,8 +20,33 @@ function subirHora() {
 
     if (validar(horallegada) && validar(horasalida)) {
         let datos = {HoraInicio: horallegada.value, HoraFin: horasalida.value}
-        ajax(datos);
+        ajaxTuplas(datos, horallegada.value, horasalida.value)
+
     }
+}
+
+function aniadirTupla(hll, hs, id_) {
+    let tabla = document.querySelector("#dev-table tbody");
+    let fila = document.createElement("tr");
+    fila.dataset.id = id_
+    let tuplaHll = document.createElement("td");
+    let tuplaHs = document.createElement("td");
+    let tuplabtn = document.createElement("td");
+    let boton = document.createElement("Button");
+    boton.classList.add("btn", "btn-primary");
+    let icono = document.createElement("i");
+    icono.classList.add("fas", "fa-edit");
+
+    boton.appendChild(icono);
+    tuplabtn.appendChild(boton);
+
+    tuplaHll.innerText = hll;
+    tuplaHs.innerText = hs;
+
+    fila.appendChild(tuplaHll);
+    fila.appendChild(tuplaHs);
+    fila.appendChild(tuplabtn);
+    tabla.appendChild(fila);
 }
 
 function validar(campo) {
@@ -36,7 +61,8 @@ function validar(campo) {
     return ok;
 }
 
-function ajax(data) {
+function ajaxTuplas(data, hll, hs) {
+
     let url = '/turnos/predefinidos/crear';
     fetch(url, {
         method: "POST",
@@ -49,7 +75,6 @@ function ajax(data) {
         return response.text();
     }).then(function (text) {
         console.log(text);
-    }).catch(function (error) {
-        console.log(error);
+        aniadirTupla(hll, hs, text);
     })
 }
