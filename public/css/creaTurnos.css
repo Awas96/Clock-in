@@ -1,0 +1,23 @@
+.creaTurnos_panel {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border: 1px solid black;
+   align-content: center;
+}
+
+.creaTurnos_panel div {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.creaTurnos_panel button {
+    margin-top: 1em;
+    width: 25%;
+}
+
+.creaTurnos_panel input {
+    align-self: center;
+    height: 2rem;
+    width: 90%;
+}
