@@ -13,10 +13,10 @@
     {% for i in turnos %}
         <tr>
             <td>
-                {{ i.horaInicio }}
+                {{ i.horaInicio | format_time(locale='es', pattern="HH:MM") }}
             </td>
             <td>
-                {{ i.horaFin }}
+                {{ i.horaFin | format_time(locale='es', pattern="HH:MM") }}
             </td>
             <td class="">
                 <button class="btn btn-primary"><i class="fas fa-edit"></i></button>

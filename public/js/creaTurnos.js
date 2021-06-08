@@ -1,12 +1,18 @@
 $('#btnCrea').on('click', function () {
    let div = $('.creaTurnos_panel');
-   toggle(div)
+    toggle(div)
 });
 
 function toggle(div) {
-   if ($(div).is(':visible')) {
-      $(div).slideToggle(200);
-   } else {
-      $(div).slideToggle(300);
-   }
+    if ($(div).is(':visible')) {
+        $(div).slideToggle(200);
+    } else {
+        $(div).slideToggle(300);
+    }
+}
+
+$('#btnAceptar').on('click', subirHora);
+
+function subirHora() {
+
 }

@@ -19,12 +19,12 @@ class TurnosPredefinidos
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="time")
      */
     private $hora_inicio;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="time")
      */
     private $hora_Fin;
 
