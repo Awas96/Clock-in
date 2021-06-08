@@ -35,11 +35,15 @@
     <div class="creaTurnos_titulo">
         <h2>Crear nueva plantilla</h2>
     </div>
-    <div class="creaTurnos_inputs">
-        <div><label>Desde: </label><input type="time" placeholder="Hora inicio..."></div>
-        <div><label>Hasta: </label><input type="time" placeholder="Hora finalizacion..."></div>
-    </div>
-    <div>
-        <button id="btnAceptar" class="btn btn-primary"><i class="fas fa-check"></i></button>
-    </div>
+    <form>
+        <div class="creaTurnos_inputs">
+
+            <div><label>Desde: </label><input id="IN_TM_D" type="time" pattern="/[\S\s]+[\S]+/"></div>
+            <div><label>Hasta: </label><input id="IN_TM_H" type="time" pattern="/[\S\s]+[\S]+/"></div>
+        </div>
+        <div>
+            <button id="btnAceptar" type="button" class="btn btn-primary"><i class="fas fa-check"></i></button>
+        </div>
+    </form>
+
 </div>
