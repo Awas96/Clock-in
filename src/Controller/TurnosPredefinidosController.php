@@ -41,8 +41,8 @@ class TurnosPredefinidosController extends AbstractController
 
                 $params = json_decode($content, true);
 
-                $inicio = new Datetime(date('h:i', strtotime($params['HoraInicio'])));
-                $fin = new Datetime(date('h:i', strtotime($params['HoraFin'])));
+                $inicio = new \Datetime(date('h:i', strtotime($params['HoraInicio'])));
+                $fin = new \Datetime(date('h:i', strtotime($params['HoraFin'])));
                 dump($params['HoraFin']);
                 $em = $this->getDoctrine()->getManager();
                 $turno = new TurnosPredefinidos();
