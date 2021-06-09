@@ -1,8 +1,9 @@
-.contenedor {
+.horarios_contenedor {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
+
 .cuerpo {
     width: 85%;
     align-self: center;

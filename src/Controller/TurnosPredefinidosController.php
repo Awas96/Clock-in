@@ -33,18 +33,12 @@ class TurnosPredefinidosController extends AbstractController
      */
     public function gestionarSecciones(Request $request, TurnosPredefinidos $turno = null): Response
     {
-        dump($request->isXMLHttpRequest());
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
-            dump($content);
             if (!empty($content)) {
-
                 $params = json_decode($content, true);
-
                 $inicio = new \Datetime(date('H:i', strtotime($params['HoraInicio'])));
                 $fin = new \Datetime(date('H:i', strtotime($params['HoraFin'])));
-                dump($inicio);
-                dump($fin);
                 $em = $this->getDoctrine()->getManager();
                 $turno = new TurnosPredefinidos();
                 $turno->setHoraInicio($inicio);

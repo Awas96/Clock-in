@@ -1,23 +1,29 @@
 {% extends 'layout.html.twig' %}
 
 {% block estilos %}
-
+    <link rel="stylesheet" href="{{ asset('css/horarios.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.css">
 {% endblock %}
 
 {% block title %}Carta{% endblock %}
 
 {% block content %}
-    <div>
-        <h1>Gestion de Horarios</h1>
-        <div>
+    <div class="horarios_contenedor">
+        <div class="horarios_contenedor_Cabecera">
+            <p>Gestion de Horarios</p>
             <select>
                 {% for i in usuarios %}
                     <option value="{{ i.id }}">{{ i.username }}</option>
                 {% endfor %}
             </select>
         </div>
+        <div>
+            <div id='calendar'></div>
+        </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
+    <script src="{{ asset('js/horarios.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.js"></script>
 {% endblock %}

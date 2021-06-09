@@ -1,0 +1,26 @@
+.horarios_contenedor {
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+.horarios_contenedor div {
+    width: 100%;
+}
+
+.horarios_contenedor_Cabecera {
+    margin-bottom: 1em;
+    line-height: 2em;
+}
+
+.horarios_contenedor_Cabecera p {
+    font-size: 1.5rem;
+}
+
+.horarios_contenedor_Cabecera select {
+    width: 50%;
+    max-width: 300px;
+}
+
+
+
