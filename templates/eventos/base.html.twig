@@ -9,7 +9,7 @@
 
 {% block content %}
     <div class="horarios_contenedor">
-        <div class="horarios_contenedor_Cabecera">
+        <div class="horarios_contenedor_cabecera">
             <p>Gestion de Horarios</p>
             <select>
                 {% for i in usuarios %}
@@ -17,7 +17,7 @@
                 {% endfor %}
             </select>
         </div>
-        <div>
+        <div class="horarios_contenedor_calendario">
             <div id='calendar'></div>
         </div>
     </div>
@@ -25,5 +25,7 @@
 
 {% block javascripts %}
     <script src="{{ asset('js/horarios.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/locales-all.min.js"></script>
 {% endblock %}

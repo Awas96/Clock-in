@@ -2,10 +2,10 @@
     margin: 1em;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .horarios_contenedor div {
-    width: 100%;
 }
 
 .horarios_contenedor_Cabecera {
@@ -17,10 +17,17 @@
     font-size: 1.5rem;
 }
 
-.horarios_contenedor_Cabecera select {
+.horarios_contenedor_cabecera select {
     width: 50%;
-    max-width: 300px;
+    max-width: 15rem;
 }
 
+.horarios_contenedor_calendario {
+    margin-top: 2rem;
+    width: 100%;
+    height: 100%;
+    max-width: 40rem;
+    align-self: center;
+}
 
 
