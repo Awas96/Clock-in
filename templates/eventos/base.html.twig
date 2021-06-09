@@ -1,0 +1,23 @@
+{% extends 'layout.html.twig' %}
+
+{% block estilos %}
+
+{% endblock %}
+
+{% block title %}Carta{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>Gestion de Horarios</h1>
+        <div>
+            <select>
+                {% for i in usuarios %}
+                    <option value="{{ i.id }}">{{ i.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
