@@ -41,18 +41,32 @@ class TurnosPredefinidosController extends AbstractController
 
                 $params = json_decode($content, true);
 
-                $inicio = new \Datetime(date('h:i', strtotime($params['HoraInicio'])));
-                $fin = new \Datetime(date('h:i', strtotime($params['HoraFin'])));
-                dump($params['HoraFin']);
+                $inicio = new \Datetime(date('H:i', strtotime($params['HoraInicio'])));
+                $fin = new \Datetime(date('H:i', strtotime($params['HoraFin'])));
+                dump($inicio);
+                dump($fin);
                 $em = $this->getDoctrine()->getManager();
                 $turno = new TurnosPredefinidos();
                 $turno->setHoraInicio($inicio);
                 $turno->setHoraFin($fin);
                 $em->persist($turno);
                 $em->flush();
-
             }
             return new JsonResponse($turno->getId());
+        }
+        return new Response('Error!', 400);
+    }
+
+    /**
+     * @Route("/eliminar/{id}", name="elemento_eliminar")
+     */
+    public function eliminar(Request $request, TurnosPredefinidosRepository $predefinidosRepository, $id): Response
+    {
+        if ($request->isXMLHttpRequest()) {
+            $turno = $predefinidosRepository->findById($id);
+            $this->getDoctrine()->getManager()->remove($turno);
+            $this->getDoctrine()->getManager()->flush();
+            return new JsonResponse(true);
         }
         return new Response('Error!', 400);
     }

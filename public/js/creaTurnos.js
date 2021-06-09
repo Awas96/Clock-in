@@ -3,6 +3,20 @@ $('#btnCrea').on('click', function () {
     toggle(div)
 });
 
+$('.btnBorrar').on('click', function (){
+    borrado($(this));
+})
+
+function borrado(obj) {
+    let elemento = obj[0];
+    let padre = elemento.parentElement.parentElement
+    let id_ = padre.dataset.id
+    let url = '/turnos/predefinidos/eliminar/'+ id_;
+    ajax(url)
+    $(padre).remove();
+
+}
+
 function toggle(div) {
     if ($(div).is(':visible')) {
         $(div).slideToggle(200);
@@ -14,18 +28,19 @@ function toggle(div) {
 $('#btnAceptar').on('click', subirHora);
 
 function subirHora() {
-
     let horallegada = document.querySelector('#IN_TM_D');
     let horasalida = document.querySelector('#IN_TM_H');
 
     if (validar(horallegada) && validar(horasalida)) {
         let datos = {HoraInicio: horallegada.value, HoraFin: horasalida.value}
-        ajaxTuplas(datos, horallegada.value, horasalida.value)
-
+        let url = '/turnos/predefinidos/crear';
+        ajax(url,datos,aniadirTupla)
     }
 }
 
-function aniadirTupla(hll, hs, id_) {
+function aniadirTupla(datos, id_) {
+    let hll = datos.HoraInicio;
+    let hs = datos.HoraFin;
     let tabla = document.querySelector("#dev-table tbody");
     let fila = document.createElement("tr");
     fila.dataset.id = id_
@@ -33,16 +48,16 @@ function aniadirTupla(hll, hs, id_) {
     let tuplaHs = document.createElement("td");
     let tuplabtn = document.createElement("td");
     let boton = document.createElement("Button");
-    boton.classList.add("btn", "btn-primary");
+    boton.classList.add("btnBorrar","btn", "btn-danger");
+    $(boton).on("click", function () {
+        borrado($(this));
+    });
     let icono = document.createElement("i");
-    icono.classList.add("fas", "fa-edit");
-
+    icono.classList.add("fas", "fa-times-circle");
     boton.appendChild(icono);
     tuplabtn.appendChild(boton);
-
     tuplaHll.innerText = hll;
     tuplaHs.innerText = hs;
-
     fila.appendChild(tuplaHll);
     fila.appendChild(tuplaHs);
     fila.appendChild(tuplabtn);
@@ -61,9 +76,8 @@ function validar(campo) {
     return ok;
 }
 
-function ajaxTuplas(data, hll, hs) {
+function ajax(url, data, callback = null) {
 
-    let url = '/turnos/predefinidos/crear';
     fetch(url, {
         method: "POST",
         body: JSON.stringify(data),
@@ -74,7 +88,6 @@ function ajaxTuplas(data, hll, hs) {
     }).then(function (response) {
         return response.text();
     }).then(function (text) {
-        console.log(text);
-        aniadirTupla(hll, hs, text);
+        if(callback != null) callback(data,text);
     })
 }

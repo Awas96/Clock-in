@@ -36,15 +36,15 @@ class TurnosPredefinidosRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?TurnosPredefinidos
+
+    public function findById($value): ?TurnosPredefinidos
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('t.id = :id')
+            ->setParameter('id', $value)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }
