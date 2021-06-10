@@ -29,6 +29,15 @@ class TurnosPredefinidosController extends AbstractController
     }
 
     /**
+     * @Route("/get", name="listar")
+     */
+    public function recoger(TurnosPredefinidosRepository $predefinidosRepository): Response
+    {
+        $predefinidos = $predefinidosRepository->findAll();
+        return new JsonResponse($predefinidos);
+    }
+
+    /**
      * @Route("/crear", name="seccion_nueva")
      */
     public function gestionarSecciones(Request $request, TurnosPredefinidos $turno = null): Response
