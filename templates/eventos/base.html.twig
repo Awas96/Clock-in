@@ -35,9 +35,8 @@
     <div class="horarios_contenedor">
         <div class="horarios_contenedor_cabecera">
             <p>Gestion de Horarios</p>
-            <select>
                 {% for i in usuarios %}
-                    <option value="{{ i.id }}">{{ i.username }}</option>
+                    <option data-usuario-id="{{ i.id }}" data-usuario-username="{{i.username}}" >{{ i.username }}</option>
                 {% endfor %}
             </select>
         </div>

@@ -29,12 +29,19 @@ class TurnosPredefinidosController extends AbstractController
     }
 
     /**
-     * @Route("/get", name="listar")
+     * @Route("/get", name="datos")
      */
     public function recoger(TurnosPredefinidosRepository $predefinidosRepository): Response
     {
         $predefinidos = $predefinidosRepository->findAll();
-        return new JsonResponse($predefinidos);
+        $horarios = array();
+
+        foreach($predefinidos as $horario) {
+
+
+            array_push($horarios, ["id" => $horario->getId(), "entrada" => $horario->getHoraInicio()->format("H.i") , "salida" => $horario->getHoraFin()->format("H.i") ]);
+        }
+        return new JsonResponse($horarios);
     }
 
     /**

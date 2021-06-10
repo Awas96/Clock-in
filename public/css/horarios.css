@@ -26,6 +26,13 @@
     margin-top: 2rem;
     width: 100%;
     height: 100%;
-    max-width: 40rem;
+    max-width: 60rem;
     align-self: center;
+}
+
+.modal-body {
+    line-height: 2rem;
+}
+.fc-header-toolbar {
+    flex-wrap: wrap;
 }
