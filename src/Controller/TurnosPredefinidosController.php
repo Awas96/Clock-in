@@ -38,9 +38,9 @@ class TurnosPredefinidosController extends AbstractController
 
         foreach($predefinidos as $horario) {
 
-
             array_push($horarios, ["id" => $horario->getId(), "entrada" => $horario->getHoraInicio()->format("H.i") , "salida" => $horario->getHoraFin()->format("H.i") ]);
         }
+        dump($horarios);
         return new JsonResponse($horarios);
     }
 

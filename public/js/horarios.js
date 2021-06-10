@@ -1,10 +1,10 @@
 /* Estructuras y definiciones */
 var calendar;
 
-function Evento(horaentrada, horasalida, titulo) {
-    this.horaentrada = horaentrada;
-    this.horasalida = horasalida;
-    this.titulo = titulo;
+function Evento(start, end, title) {
+    this.start = start;
+    this.end = end;
+    this.title = title;
 }
 
 /* Funciones */
@@ -30,27 +30,30 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* Funciones para eventos */
-function agregarEvento() {
-    alert(hola);
+function agregarEvento(info) {
     let evento = new Evento();
-    let x = document.querySelector("#modal-hora").selectedIndex;
-    evento.horaentrada = document.querySelectorAll("#modal-hora option")[x].dataset.hInit;
-    evento.horasalida = document.querySelectorAll("#modal-hora option")[x].dataset.hSal;
-    evento.titulo = "Trabajo";
+    let indice = document.querySelector("#modal-hora").selectedIndex;
+    evento.start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
+    evento.end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
+    evento.title = "Trabajo";
     let titulo = document.querySelector("#modal-title");
     titulo.innerText = "Evento de dia:  " + info.dateStr;
-    console.log(evento)
-    //aniadirEvento(evento);
+    aniadirEvento(evento, info.dateStr);
 }
 
-function aniadirEvento(evento) {
-    calendar.addEvent(evento);
+function aniadirEvento(evento, fecha) {
+
+    calendar.addEvent({
+        title: evento.title,
+        start: fecha + " " + evento.start,
+        end: fecha + " " + evento.end,
+    });
 }
 
 /*Funciones para el Modal*/
 
 function pulsarDia(info) {
-    crearModalDia(info.dateStr);
+    crearModalDia(info);
     $('#Modal').modal()
 
 }
@@ -62,10 +65,10 @@ function limpiaModal() {
 
 }
 
-function crearModalDia(fecha) {
+function crearModalDia(info) {
     limpiaModal();
     /*Titulo*/
-    document.querySelector(".modal-title").innerText = "Nuevo evento para día " + fecha;
+    document.querySelector(".modal-title").innerText = "Nuevo evento para día " + info.dateStr;
     /*Cuerpo*/
     let cuerpo = document.querySelector(".modal-body");
     let titulo = document.createElement("p");
@@ -76,7 +79,6 @@ function crearModalDia(fecha) {
     cuerpo.appendChild(titulo);
     cuerpo.appendChild(selector);
     let select = rellenarHorariosSelect();
-    console.log(select)
     cuerpo.appendChild(select);
 
 
@@ -88,8 +90,11 @@ function crearModalDia(fecha) {
     btnCancelar.textContent = "Cancelar"
     btnCancelar.dataset.dismiss = "modal";
     btnAceptar.classList.add("btn", "btn-primary");
+    btnAceptar.dataset.dismiss = "modal";
     btnAceptar.textContent = "Aceptar"
-    btnAceptar.addEventListener("click", agregarEvento);
+    btnAceptar.addEventListener("click", function () {
+        agregarEvento(info)
+    });
     footer.appendChild(btnCancelar);
     footer.appendChild(btnAceptar);
 
@@ -104,8 +109,8 @@ function rellenarHorariosSelect() {
         let e = JSON.parse(elemento)
         let option = document.createElement("option");
         option.dataset.id = e.id;
-        option.dataset.hInit = e.entrada;
-        option.dataset.hSal = e.salida;
+        option.dataset.hInit = e.entrada.replace(".", ":");
+        option.dataset.hSal = e.salida.replace(".", ":");
         option.text = " " + e.entrada + " ~ " + e.salida;
         select.appendChild(option)
     });
