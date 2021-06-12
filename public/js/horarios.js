@@ -1,14 +1,18 @@
 /* Estructuras y definiciones */
 var calendar;
 
-function Evento(start, end, title) {
+function Evento(fecha, start, end, title) {
+    this.fecha = fecha;
     this.start = start;
     this.end = end;
     this.title = title;
 }
 
+var eventos = [];
+
 /* Funciones */
 document.addEventListener('DOMContentLoaded', function () {
+    let btnGuardar = document.querySelector("#btnGuardar");
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
         height: 500,
@@ -22,32 +26,63 @@ document.addEventListener('DOMContentLoaded', function () {
         selectable: true,
         editable: true,
         dateClick: function (info) {
-            pulsarDia(info)
+            if (document.querySelector("#selectUsuarios")[document.querySelector("#selectUsuarios").selectedIndex].dataset.usuarioId != "null") {
+                btnGuardar.disabled = false;
+                pulsarDia(info)
+            } else {
+                btnGuardar.disabled = true;
+                alert("Debes seleccionar un usuario antes de editar el horario!")
+            }
         },
     });
     getHorarios();
     calendar.render();
+    btnGuardar.addEventListener("click", guardarDatos);
 });
 
 /* Funciones para eventos */
+
 function agregarEvento(info) {
     let evento = new Evento();
     let indice = document.querySelector("#modal-hora").selectedIndex;
+    evento.fecha = info.dateStr;
     evento.start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
     evento.end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
-    evento.title = "Trabajo";
+    evento.title = "Turno";
     let titulo = document.querySelector("#modal-title");
     titulo.innerText = "Evento de dia:  " + info.dateStr;
     aniadirEvento(evento, info.dateStr);
 }
 
-function aniadirEvento(evento, fecha) {
+function aniadirEvento(evento) {
 
     calendar.addEvent({
         title: evento.title,
-        start: fecha + " " + evento.start,
-        end: fecha + " " + evento.end,
+        start: evento.fecha + " " + evento.start,
+        end: evento.fecha + " " + evento.end,
     });
+    eventos.push(evento);
+    console.log(JSON.stringify(eventos));
+}
+
+function guardarDatos() {
+    if (eventos.length > 0) {
+        let idusuario = document.querySelector("#selectUsuarios")[document.querySelector("#selectUsuarios").selectedIndex].dataset.usuarioId;
+        let url = "/eventos/gestionaHorarios/agregar"
+        eventos.forEach(function (e) {
+            let datos = {
+                id: idusuario,
+                fecha: e.fecha,
+                inicio: e.start,
+                fin: e.end,
+                tipo: e.title
+            }
+
+            ajax(url, datos);
+        })
+    } else {
+        alert('Nada que guardar!');
+    }
 }
 
 /*Funciones para el Modal*/
@@ -148,7 +183,7 @@ function allStorage() {
     return values;
 }
 
-function ajax(url, callback = null, data = null) {
+function ajax(url, data = null, callback = null) {
 
     fetch(url, {
         method: "POST",
@@ -163,3 +198,5 @@ function ajax(url, callback = null, data = null) {
         if (callback != null) callback(text, data);
     })
 }
+
+/* funciones para guardar datos*/

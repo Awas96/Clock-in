@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Turno;
 use App\Entity\TurnosPredefinidos;
 use App\Repository\TurnosPredefinidosRepository;
 use DateTime;

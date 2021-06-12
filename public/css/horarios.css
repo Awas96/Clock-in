@@ -8,18 +8,36 @@
 .horarios_contenedor div {
 }
 
-.horarios_contenedor_Cabecera {
+.horarios_contenedor_cabecera {
+    display: flex;
+    justify-content: space-around;
     margin-bottom: 1em;
     line-height: 2em;
 }
 
-.horarios_contenedor_Cabecera p {
-    font-size: 1.5rem;
+.horarios_contenedor_cabecera div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+.horarios_contenedor_cabecera p {
+    font-size: 1.1rem;
 }
 
 .horarios_contenedor_cabecera select {
-    width: 50%;
+    width: 60%;
     max-width: 15rem;
+    min-width: 4rem;
+    align-self: center;
+}
+
+.horarios_contenedor_cabecera button {
+    font-size: 1.1rem;
+    max-width: 15rem;
+    align-self: center;
 }
 
 .horarios_contenedor_calendario {
