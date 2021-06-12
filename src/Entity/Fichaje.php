@@ -23,21 +23,15 @@ class Fichaje
      */
     private $hora;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="fichaje")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $evento;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEvento(): ?Evento
-    {
-        return $this->evento;
-    }
-
-    public function setEvento(Evento $evento): self
-    {
-        $this->evento = $evento;
-
-        return $this;
     }
 
     public function getHora(): ?DateTimeInterface
@@ -48,6 +42,18 @@ class Fichaje
     public function setHora(DateTimeInterface $hora): self
     {
         $this->hora = $hora;
+
+        return $this;
+    }
+
+    public function getEvento(): ?Evento
+    {
+        return $this->evento;
+    }
+
+    public function setEvento(?Evento $evento): self
+    {
+        $this->evento = $evento;
 
         return $this;
     }

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\EventoRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,25 +26,32 @@ class Evento
     private $fecha;
 
     /**
-     * @ORM\OneToOne(targetEntity=Fichaje::class, cascade={"persist", "remove"})
-     */
-    private $fichaje;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Turno::class, cascade={"persist", "remove"})
-     */
-    private $turno;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Incidencia::class, cascade={"persist", "remove"})
-     */
-    private $incidencia;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Usuario::class, inversedBy="evento")
      * @ORM\JoinColumn(nullable=false)
      */
     private $usuario;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Fichaje::class, mappedBy="evento", orphanRemoval=true)
+     */
+    private $fichaje;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Turno::class, mappedBy="evento", orphanRemoval=true)
+     */
+    private $turno;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Incidencia::class, mappedBy="evento", orphanRemoval=true)
+     */
+    private $incidencia;
+
+    public function __construct()
+    {
+        $this->fichaje = new ArrayCollection();
+        $this->turno = new ArrayCollection();
+        $this->incidencia = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -61,42 +70,6 @@ class Evento
         return $this;
     }
 
-    public function getFichaje(): ?Fichaje
-    {
-        return $this->fichaje;
-    }
-
-    public function setFichaje(?Fichaje $fichaje): self
-    {
-        $this->fichaje = $fichaje;
-
-        return $this;
-    }
-
-    public function getTurno(): ?Turno
-    {
-        return $this->turno;
-    }
-
-    public function setTurno(?Turno $turno): self
-    {
-        $this->turno = $turno;
-
-        return $this;
-    }
-
-    public function getIncidencia(): ?Incidencia
-    {
-        return $this->incidencia;
-    }
-
-    public function setIncidencia(?Incidencia $incidencia): self
-    {
-        $this->incidencia = $incidencia;
-
-        return $this;
-    }
-
     public function getUsuario(): ?Usuario
     {
         return $this->usuario;
@@ -105,6 +78,96 @@ class Evento
     public function setUsuario(?Usuario $usuario): self
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Fichaje[]
+     */
+    public function getFichaje(): Collection
+    {
+        return $this->fichaje;
+    }
+
+    public function addFichaje(Fichaje $fichaje): self
+    {
+        if (!$this->fichaje->contains($fichaje)) {
+            $this->fichaje[] = $fichaje;
+            $fichaje->setEvento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFichaje(Fichaje $fichaje): self
+    {
+        if ($this->fichaje->removeElement($fichaje)) {
+            // set the owning side to null (unless already changed)
+            if ($fichaje->getEvento() === $this) {
+                $fichaje->setEvento(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Turno[]
+     */
+    public function getTurno(): Collection
+    {
+        return $this->turno;
+    }
+
+    public function addTurno(Turno $turno): self
+    {
+        if (!$this->turno->contains($turno)) {
+            $this->turno[] = $turno;
+            $turno->setEvento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTurno(Turno $turno): self
+    {
+        if ($this->turno->removeElement($turno)) {
+            // set the owning side to null (unless already changed)
+            if ($turno->getEvento() === $this) {
+                $turno->setEvento(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Incidencia[]
+     */
+    public function getIncidencia(): Collection
+    {
+        return $this->incidencia;
+    }
+
+    public function addIncidencium(Incidencia $incidencium): self
+    {
+        if (!$this->incidencia->contains($incidencium)) {
+            $this->incidencia[] = $incidencium;
+            $incidencium->setEvento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIncidencium(Incidencia $incidencium): self
+    {
+        if ($this->incidencia->removeElement($incidencium)) {
+            // set the owning side to null (unless already changed)
+            if ($incidencium->getEvento() === $this) {
+                $incidencium->setEvento(null);
+            }
+        }
 
         return $this;
     }

@@ -28,6 +28,12 @@ class Turno
      */
     private $horaFin;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="turno")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $evento;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +59,18 @@ class Turno
     public function setHoraFin(DateTimeInterface $horaFin): self
     {
         $this->horaFin = $horaFin;
+
+        return $this;
+    }
+
+    public function getEvento(): ?Evento
+    {
+        return $this->evento;
+    }
+
+    public function setEvento(?Evento $evento): self
+    {
+        $this->evento = $evento;
 
         return $this;
     }

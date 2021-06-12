@@ -29,10 +29,10 @@ class Incidencia
     private $motivo;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="incidencia")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $hora;
-
+    private $evento;
 
     public function getId(): ?int
     {
@@ -63,14 +63,14 @@ class Incidencia
         return $this;
     }
 
-    public function getHora(): ?DateTimeInterface
+    public function getEvento(): ?Evento
     {
-        return $this->hora;
+        return $this->evento;
     }
 
-    public function setHora(DateTimeInterface $hora): self
+    public function setEvento(?Evento $evento): self
     {
-        $this->hora = $hora;
+        $this->evento = $evento;
 
         return $this;
     }
