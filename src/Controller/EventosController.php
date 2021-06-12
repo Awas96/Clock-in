@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Evento;
 use App\Entity\Turno;
 use App\Repository\EventoRepository;
+use App\Repository\TurnoRepository;
 use App\Repository\UsuarioRepository;
 use Datetime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventosController extends AbstractController
 {
     /**
-     * @Route("/gestionaHorarios", name="gestiona_horarios")
+     * @Route("/gestion/horarios", name="gestiona_horarios")
      */
     public function base(UsuarioRepository $usuarioRepository): Response
     {
@@ -31,26 +32,37 @@ class EventosController extends AbstractController
     }
 
     /**
-     * @Route("/gestionaHorarios/leer", name="gestiona_horarios_leer")
+     * @Route("/gestion/horarios/leer", name="gestiona_horarios_leer")
      */
-    public function recoger(EventoRepository $eventoRepository): Response
+    public function recoger(Request $request, EventoRepository $eventoRepository, TurnoRepository $turnoRepository): Response
     {
         //recoger solo los eventos que nos interesan
-        $predefinidos = $predefinidosRepository->findAll();
-        $horarios = array();
-
-        foreach ($predefinidos as $horario) {
-
-            array_push($horarios, ["id" => $horario->getId(), "entrada" => $horario->getHoraInicio()->format("H.i"), "salida" => $horario->getHoraFin()->format("H.i")]);
+        if ($request->isXMLHttpRequest()) {
+            $content = $request->getContent();
+            if (!empty($content)) {
+                $params = json_decode($content, true);
+                $enEventos = ($eventoRepository->findByUsId($params["idusuario"]));
+                $eventos = array();
+                dump($enEventos);
+                foreach ($enEventos as $ev) {
+                    $enTurnos = ($turnoRepository->findByEvento($ev->getId()));
+                    foreach ($enTurnos as $et) {
+                        array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "id_turno" => $et->getId(), "start" => $et->getHoraInicio()->format("H:i"), "end" => $et->getHoraFin()->format("H:i"), "title" => "Turno"]);
+                    }
+                }
+            }
+            return new JsonResponse($eventos);
         }
-        dump($horarios);
-        return new JsonResponse($horarios);
+
+        return new Response('Error!', 400);
     }
 
+
     /**
-     * @Route("/gestionaHorarios/agregar", name="gestiona_horarios_agregar")
+     * @Route("/gestion/horarios/agregar", name="gestiona_horarios_agregar")
      */
-    public function agregar(Request $request, UsuarioRepository $usuarioRepository, Evento $evento = null, Turno $turno = null): Response
+    public
+    function agregar(Request $request, UsuarioRepository $usuarioRepository, Evento $evento = null, Turno $turno = null): Response
     {
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();

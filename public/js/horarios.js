@@ -1,11 +1,14 @@
 /* Estructuras y definiciones */
 var calendar;
 
-function Evento(fecha, start, end, title) {
+function Evento(id_evento, id_turno, fecha, start, end, title, save) {
+    this.id_evento = id_evento;
+    this.id_turno = id_turno;
     this.fecha = fecha;
     this.start = start;
     this.end = end;
     this.title = title;
+    this.save = save;
 }
 
 var eventos = [];
@@ -13,6 +16,7 @@ var eventos = [];
 /* Funciones */
 document.addEventListener('DOMContentLoaded', function () {
     let btnGuardar = document.querySelector("#btnGuardar");
+    let slctUsuarios = document.querySelector("#selectUsuarios");
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
         height: 500,
@@ -26,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         selectable: true,
         editable: true,
         dateClick: function (info) {
-            if (document.querySelector("#selectUsuarios")[document.querySelector("#selectUsuarios").selectedIndex].dataset.usuarioId != "null") {
+            if (slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId != "null") {
                 btnGuardar.disabled = false;
                 pulsarDia(info)
             } else {
@@ -37,21 +41,28 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     getHorarios();
     calendar.render();
+    slctUsuarios.addEventListener("change", function (e) {
+        eventos = []
+        cargarEventos(e.target)
+    });
     btnGuardar.addEventListener("click", guardarDatos);
 });
 
-/* Funciones para eventos */
+/* funciones por determinar*/
 
-function agregarEvento(info) {
+function agregarNuevoEvento(info) {
     let evento = new Evento();
     let indice = document.querySelector("#modal-hora").selectedIndex;
+    evento.id_evento = "new";
+    evento.id_turno = "new";
     evento.fecha = info.dateStr;
     evento.start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
     evento.end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
     evento.title = "Turno";
+    evento.save = true;
     let titulo = document.querySelector("#modal-title");
     titulo.innerText = "Evento de dia:  " + info.dateStr;
-    aniadirEvento(evento, info.dateStr);
+    aniadirEvento(evento);
 }
 
 function aniadirEvento(evento) {
@@ -62,28 +73,9 @@ function aniadirEvento(evento) {
         end: evento.fecha + " " + evento.end,
     });
     eventos.push(evento);
-    console.log(JSON.stringify(eventos));
+    console.log(eventos);
 }
 
-function guardarDatos() {
-    if (eventos.length > 0) {
-        let idusuario = document.querySelector("#selectUsuarios")[document.querySelector("#selectUsuarios").selectedIndex].dataset.usuarioId;
-        let url = "/eventos/gestionaHorarios/agregar"
-        eventos.forEach(function (e) {
-            let datos = {
-                id: idusuario,
-                fecha: e.fecha,
-                inicio: e.start,
-                fin: e.end,
-                tipo: e.title
-            }
-
-            ajax(url, datos);
-        })
-    } else {
-        alert('Nada que guardar!');
-    }
-}
 
 /*Funciones para el Modal*/
 
@@ -128,7 +120,7 @@ function crearModalDia(info) {
     btnAceptar.dataset.dismiss = "modal";
     btnAceptar.textContent = "Aceptar"
     btnAceptar.addEventListener("click", function () {
-        agregarEvento(info)
+        agregarNuevoEvento(info)
     });
     footer.appendChild(btnCancelar);
     footer.appendChild(btnAceptar);
@@ -144,8 +136,8 @@ function rellenarHorariosSelect() {
         let e = JSON.parse(elemento)
         let option = document.createElement("option");
         option.dataset.id = e.id;
-        option.dataset.hInit = e.entrada.replace(".", ":");
-        option.dataset.hSal = e.salida.replace(".", ":");
+        option.dataset.hInit = e.entrada;
+        option.dataset.hSal = e.salida;
         option.text = " " + e.entrada + " ~ " + e.salida;
         select.appendChild(option)
     });
@@ -153,35 +145,43 @@ function rellenarHorariosSelect() {
     return select;
 }
 
-/* Funciones para recoger datos */
+/* Funciones para enviar/recoger datos */
+
+function cargarEventos(e) {
+    let url = "/eventos/gestion/horarios/leer";
+    let datos = {
+        idusuario: e[e.selectedIndex].dataset.usuarioId
+    }
+    ajax(url, datos, cargarHorarios)
+}
+
+function guardarDatos() {
+    if (eventos.length > 0) {
+        let idusuario = document.querySelector("#selectUsuarios")[document.querySelector("#selectUsuarios").selectedIndex].dataset.usuarioId;
+        let url = "/eventos/gestion/horarios/agregar"
+        eventos.forEach(function (e) {
+            if (e.save === true) {
+                let datos = {
+                    id: idusuario,
+                    fecha: e.fecha,
+                    inicio: e.start,
+                    fin: e.end,
+                    tipo: e.title
+                }
+                ajax(url, datos);
+            }
+        })
+    } else {
+        alert('Nada que guardar!');
+    }
+}
+
 
 function getHorarios() {
     let url = '/turnos/predefinidos/get';
-    ajax(url, guardarHorarios);
+    ajax(url, null, guardarHorarios);
 }
 
-function guardarHorarios(datos) {
-    datos = JSON.parse(datos);
-    let sessionStorage = window.sessionStorage;
-    sessionStorage.clear();
-    datos.forEach(function (e) {
-        sessionStorage.setItem("HORARIO_" + e.id, JSON.stringify(e));
-    })
-}
-
-function allStorage() {
-
-    var values = [],
-        keys = Object.keys(sessionStorage),
-        i = keys.length;
-
-    while (i--) {
-        if (keys[i].includes("HORARIO")) {
-            values.push(sessionStorage.getItem(keys[i]));
-        }
-    }
-    return values;
-}
 
 function ajax(url, data = null, callback = null) {
 
@@ -199,4 +199,41 @@ function ajax(url, data = null, callback = null) {
     })
 }
 
-/* funciones para guardar datos*/
+/* funciones callback tras llamada a datos*/
+
+
+function guardarHorarios(datos) {
+    datos = JSON.parse(datos);
+    let sessionStorage = window.sessionStorage;
+    sessionStorage.clear();
+    datos.forEach(function (e) {
+        sessionStorage.setItem("HORARIO_" + e.id, JSON.stringify(e));
+    })
+}
+
+function cargarHorarios(eventos) {
+    calendar.removeAllEvents();
+    console.log(JSON.parse(eventos))
+    let datos = JSON.parse(eventos);
+    datos.forEach(function (e) {
+        evento = new Evento(e.id_evento, e.id_turno, e.fecha, e.start, e.end, e.title, false);
+        aniadirEvento(evento);
+    })
+
+}
+
+/* Funciones Miscelaneas*/
+
+function allStorage() {
+
+    var values = [],
+        keys = Object.keys(sessionStorage),
+        i = keys.length;
+
+    while (i--) {
+        if (keys[i].includes("HORARIO")) {
+            values.push(sessionStorage.getItem(keys[i]));
+        }
+    }
+    return values;
+}

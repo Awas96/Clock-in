@@ -22,19 +22,18 @@ class EventoRepository extends ServiceEntityRepository
     // /**
     //  * @return Evento[] Returns an array of Evento objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByUsId($value)
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
+            ->andWhere('e.usuario = :val')
             ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
+            ->orderBy('e.fecha', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Evento

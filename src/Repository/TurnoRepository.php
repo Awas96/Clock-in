@@ -22,19 +22,17 @@ class TurnoRepository extends ServiceEntityRepository
     // /**
     //  * @return Turno[] Returns an array of Turno objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByEvento($value)
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
+            ->andWhere('t.evento = :val')
             ->setParameter('val', $value)
             ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Turno
