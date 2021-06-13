@@ -41,7 +41,12 @@ class EventosController extends AbstractController
             $content = $request->getContent();
             if (!empty($content)) {
                 $params = json_decode($content, true);
-                $enEventos = ($eventoRepository->findByUsId($params["idusuario"]));
+                $startDate = \DateTime::createFromFormat('d-n-Y', "01-" . ($params["mes"] - 1) . "-" . $params["anno"]);
+                $startDate->setTime(0, 0, 0);
+
+                $endDate = \DateTime::createFromFormat('d-n-Y', "01-" . ($params["mes"] + 2) . "-" . $params["anno"]);
+                $endDate->setTime(0, 0, 0);
+                $enEventos = ($eventoRepository->findByUsIdAndDate($params["idusuario"], $startDate->format("Y-m-d"), $endDate->format("Y-m-d")));
                 $eventos = array();
                 dump($enEventos);
                 foreach ($enEventos as $ev) {

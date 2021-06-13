@@ -12,19 +12,21 @@ function Evento(id_evento, id_turno, fecha, start, end, title, save, color) {
     this.color = color;
 }
 
+var num = 0;
 var eventos = [];
 
 /* Funciones */
 document.addEventListener('DOMContentLoaded', function () {
     let btnGuardar = document.querySelector("#btnGuardar");
     let slctUsuarios = document.querySelector("#selectUsuarios");
+
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
         height: 500,
         headerToolbar: {
             left: 'today,prev,next',
             right: 'title',
-            center: 'dayGridMonth,dayGridWeek,timeGridDay'
+            center: ''
         },
         locale: 'es',
         initialView: 'dayGridMonth',
@@ -41,6 +43,37 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     getHorarios();
     calendar.render();
+    let prevButton = document.querySelector(".fc-prev-button")
+    let nextButton = document.querySelector(".fc-next-button")
+    prevButton.disabled = true
+    nextButton.disabled = true
+
+    prevButton.addEventListener("click", function () {
+        {
+            num--
+            console.log(num)
+            if (num == -2) {
+                if (document.querySelector("#btnGuardar").disabled == false) {
+                    crearModalMensaje("Advertencia", "Se perderan todos los datos guardados", "Aceptar", "Cancelar", cargarEventos, volverAMesAtras)
+                } else {
+                    cargarEventos();
+                }
+            }
+        }
+    });
+    nextButton.addEventListener("click", function () {
+        {
+            num++
+            console.log(num)
+            if (num == 2) {
+                if (document.querySelector("#btnGuardar").disabled == false) {
+                    crearModalMensaje("Advertencia", "Se perderan todos los datos guardados", "Aceptar", "Cancelar", cargarEventos, volverAMesAlante)
+                } else {
+                    cargarEventos();
+                }
+            }
+        }
+    });
     slctUsuarios.addEventListener("change", cargarEventos);
     btnGuardar.addEventListener("click", crearModalGuardar);
 });
@@ -118,8 +151,8 @@ function crearModalDia(info) {
     btnAceptar.dataset.dismiss = "modal";
     btnAceptar.textContent = "Aceptar"
     btnAceptar.addEventListener("click", function () {
-        let btnGuardar = document.querySelector("#btnGuardar").disabled = false;
-        let select = document.querySelector("#selectUsuarios").disabled = true;
+        document.querySelector("#btnGuardar").disabled = false;
+        document.querySelector("#selectUsuarios").disabled = true;
         agregarNuevoEvento(info)
     });
     footer.appendChild(btnCancelar);
@@ -158,7 +191,7 @@ function crearModalGuardar(info) {
     $('#Modal').modal()
 }
 
-function crearModalMensaje(cabecera, mensaje, btnmsg1 = "Aceptar", btnmsg2 = null, callback1, callback2) {
+function crearModalMensaje(cabecera, mensaje, btnmsg1 = "Aceptar", btnmsg2 = null, callback1, callback2, extra) {
     limpiaModal();
     /*Titulo*/
     document.querySelector(".modal-title").innerText = cabecera;
@@ -182,7 +215,7 @@ function crearModalMensaje(cabecera, mensaje, btnmsg1 = "Aceptar", btnmsg2 = nul
         btnCerrar.dataset.dismiss = "modal";
         btnCerrar.textContent = btnmsg2
         btnCerrar.addEventListener("click", function () {
-            if (callback2 != null) callback2();
+            if (callback2 != null) callback2(extra);
         })
         footer.appendChild(btnCerrar);
     }
@@ -212,12 +245,18 @@ function rellenarHorariosSelect() {
 /* Funciones para enviar/recoger datos */
 
 function cargarEventos() {
+    num = 0;
+    document.querySelector(".fc-prev-button").disabled = false;
+    document.querySelector(".fc-next-button").disabled = false;
     eventos = []
     let btnGuardar = document.querySelector("#btnGuardar").disabled = true;
     let slctUsuarios = document.querySelector("#selectUsuarios");
+    slctUsuarios.disabled = false;
     let url = "/eventos/gestion/horarios/leer";
     let datos = {
-        idusuario: slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId
+        idusuario: slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId,
+        mes: (calendar.getDate().getMonth() + 1),
+        anno: calendar.getDate().getFullYear()
     }
     ajax(url, datos, cargarHorarios)
 }
@@ -310,3 +349,12 @@ function allStorage() {
     return values;
 }
 
+function volverAMesAtras() {
+    document.querySelector(".fc-next-button").click();
+    document.querySelector(".fc-next-button").click();
+}
+
+function volverAMesAlante() {
+    document.querySelector(".fc-prev-button").click();
+    document.querySelector(".fc-prev-button").click();
+}
