@@ -67,31 +67,32 @@ class EventosController extends AbstractController
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
             if (!empty($content)) {
-                $params = json_decode($content, true);
-                if ($params["tipo"] == "Turno") {
-
-                    $id = $params["id"];
-                    $fecha = new Datetime(date('Y-m-d', strtotime($params["fecha"])));
-                    $inicio = new Datetime(date('H:i', strtotime($params['inicio'])));
-                    $fin = new Datetime(date('H:i', strtotime($params['fin'])));
-                    $em = $this->getDoctrine()->getManager();
-                    $evento = new Evento();
-                    $evento->setFecha($fecha);
-                    $evento->setUsuario($usuarioRepository->findByID($id));
-                    $em->persist($evento);
-                    $em->flush();
-                    $turno = new Turno();
-                    $turno->setHoraInicio($inicio);
-                    $turno->setHoraFin($fin);
-                    $turno->setEvento($evento);
-                    dump($evento);
-                    dump($turno);
-                    $em->persist($evento);
-                    $em->persist($turno);
-                    $em->flush();
+                $datos = json_decode($content, true);
+                foreach ($datos as $params) {
+                    if ($params["tipo"] == "Turno") {
+                        $id = $params["id"];
+                        $fecha = new Datetime(date('Y-m-d', strtotime($params["fecha"])));
+                        $inicio = new Datetime(date('H:i', strtotime($params['inicio'])));
+                        $fin = new Datetime(date('H:i', strtotime($params['fin'])));
+                        $em = $this->getDoctrine()->getManager();
+                        $evento = new Evento();
+                        $evento->setFecha($fecha);
+                        $evento->setUsuario($usuarioRepository->findByID($id));
+                        $em->persist($evento);
+                        $em->flush();
+                        $turno = new Turno();
+                        $turno->setHoraInicio($inicio);
+                        $turno->setHoraFin($fin);
+                        $turno->setEvento($evento);
+                        $em->persist($evento);
+                        $em->persist($turno);
+                        $em->flush();
+                    }
                 }
+
             }
-            return new JsonResponse("YESSSS");
+
+            return new JsonResponse("Datos guardados correctamente!");
         }
         return new Response('Error!', 400);
     }

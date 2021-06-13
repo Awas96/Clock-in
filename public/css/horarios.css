@@ -54,3 +54,8 @@
 .fc-header-toolbar {
     flex-wrap: wrap;
 }
+
+.fc-event-start {
+    display: flex;
+    flex-wrap: wrap;
+}

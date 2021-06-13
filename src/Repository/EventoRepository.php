@@ -29,7 +29,6 @@ class EventoRepository extends ServiceEntityRepository
             ->andWhere('e.usuario = :val')
             ->setParameter('val', $value)
             ->orderBy('e.fecha', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }

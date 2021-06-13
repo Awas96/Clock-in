@@ -31,7 +31,11 @@
         </div>
     </div>
 
-
+    {% for flash_message in app.session.flashbag.get('notice') %}
+        <div class="flash-notice">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
     <div class="horarios_contenedor">
         <div class="horarios_contenedor_cabecera">
             <div>
@@ -39,12 +43,13 @@
                 <select id="selectUsuarios">
                     <option data-usuario-id="null" selected="selected" disabled>Selecciona un usuario</option>
                     {% for i in usuarios %}
-                        <option data-usuario-id="{{ i.id }}" data-usuario-username="{{i.username}}" >{{ i.username }}</option>
+                        <option data-usuario-id="{{ i.id }}"
+                                data-usuario-username="{{ i.username }}">{{ i.username }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div>
-                <button id="btnGuardar" disabled class="btn btn-primary">Guardar datos</button>
+                <button id="btnGuardar" disabled class="btn btn-primary">Guardar cambios</button>
             </div>
         </div>
         <div class="horarios_contenedor_calendario">

@@ -1,7 +1,7 @@
 /* Estructuras y definiciones */
 var calendar;
 
-function Evento(id_evento, id_turno, fecha, start, end, title, save) {
+function Evento(id_evento, id_turno, fecha, start, end, title, save, color) {
     this.id_evento = id_evento;
     this.id_turno = id_turno;
     this.fecha = fecha;
@@ -9,6 +9,7 @@ function Evento(id_evento, id_turno, fecha, start, end, title, save) {
     this.end = end;
     this.title = title;
     this.save = save;
+    this.color = color;
 }
 
 var eventos = [];
@@ -31,21 +32,17 @@ document.addEventListener('DOMContentLoaded', function () {
         editable: true,
         dateClick: function (info) {
             if (slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId != "null") {
-                btnGuardar.disabled = false;
                 pulsarDia(info)
             } else {
                 btnGuardar.disabled = true;
-                alert("Debes seleccionar un usuario antes de editar el horario!")
+                crearModalMensaje("Advertencia", "Debes seleccionar un usuario antes de editar el horario!")
             }
         },
     });
     getHorarios();
     calendar.render();
-    slctUsuarios.addEventListener("change", function (e) {
-        eventos = []
-        cargarEventos(e.target)
-    });
-    btnGuardar.addEventListener("click", guardarDatos);
+    slctUsuarios.addEventListener("change", cargarEventos);
+    btnGuardar.addEventListener("click", crearModalGuardar);
 });
 
 /* funciones por determinar*/
@@ -60,6 +57,7 @@ function agregarNuevoEvento(info) {
     evento.end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
     evento.title = "Turno";
     evento.save = true;
+    evento.color = "#ffaa03"
     let titulo = document.querySelector("#modal-title");
     titulo.innerText = "Evento de dia:  " + info.dateStr;
     aniadirEvento(evento);
@@ -71,9 +69,9 @@ function aniadirEvento(evento) {
         title: evento.title,
         start: evento.fecha + " " + evento.start,
         end: evento.fecha + " " + evento.end,
+        color: evento.color
     });
     eventos.push(evento);
-    console.log(eventos);
 }
 
 
@@ -120,11 +118,77 @@ function crearModalDia(info) {
     btnAceptar.dataset.dismiss = "modal";
     btnAceptar.textContent = "Aceptar"
     btnAceptar.addEventListener("click", function () {
+        let btnGuardar = document.querySelector("#btnGuardar").disabled = false;
+        let select = document.querySelector("#selectUsuarios").disabled = true;
         agregarNuevoEvento(info)
     });
     footer.appendChild(btnCancelar);
     footer.appendChild(btnAceptar);
 
+
+}
+
+function crearModalGuardar(info) {
+    limpiaModal();
+    let ok = false;
+    /*Titulo*/
+    document.querySelector(".modal-title").innerText = "¿Quieres guardar todos los eventos?";
+    /*Cuerpo*/
+    let cuerpo = document.querySelector(".modal-body");
+    let titulo = document.createElement("p");
+    titulo.innerText = "Se guardarán todos los nuevos datos";
+    cuerpo.appendChild(titulo);
+
+    /*Pie*/
+    let footer = document.querySelector(".modal-footer");
+    let btnCancelar = document.createElement("button");
+    let btnAceptar = document.createElement("button");
+    btnCancelar.classList.add("btn", "btn-secondary");
+    btnCancelar.textContent = "Cancelar"
+    btnCancelar.dataset.dismiss = "modal";
+    btnAceptar.classList.add("btn", "btn-primary");
+    btnAceptar.dataset.dismiss = "modal";
+    btnAceptar.textContent = "Aceptar"
+    btnAceptar.addEventListener("click", function () {
+        guardarDatos();
+        crearModalMensaje("Mensaje", "Datos guardados correctamente!");
+    })
+    footer.appendChild(btnCancelar);
+    footer.appendChild(btnAceptar);
+    $('#Modal').modal()
+}
+
+function crearModalMensaje(cabecera, mensaje, btnmsg1 = "Aceptar", btnmsg2 = null, callback1, callback2) {
+    limpiaModal();
+    /*Titulo*/
+    document.querySelector(".modal-title").innerText = cabecera;
+    let cuerpo = document.querySelector(".modal-body");
+    let titulo = document.createElement("p");
+    titulo.innerText = mensaje;
+    cuerpo.appendChild(titulo);
+    /*Pie*/
+    let footer = document.querySelector(".modal-footer");
+    let btnAceptar = document.createElement("button");
+
+    btnAceptar.classList.add("btn", "btn-primary");
+    btnAceptar.dataset.dismiss = "modal";
+    btnAceptar.textContent = btnmsg1
+    btnAceptar.addEventListener("click", function () {
+        if (callback1 != null) callback1();
+    })
+    if (btnmsg2 != null) {
+        let btnCerrar = document.createElement("button");
+        btnCerrar.classList.add("btn", "btn-secondary");
+        btnCerrar.dataset.dismiss = "modal";
+        btnCerrar.textContent = btnmsg2
+        btnCerrar.addEventListener("click", function () {
+            if (callback2 != null) callback2();
+        })
+        footer.appendChild(btnCerrar);
+    }
+
+    footer.appendChild(btnAceptar);
+    $('#Modal').modal()
 
 }
 
@@ -147,30 +211,39 @@ function rellenarHorariosSelect() {
 
 /* Funciones para enviar/recoger datos */
 
-function cargarEventos(e) {
+function cargarEventos() {
+    eventos = []
+    let btnGuardar = document.querySelector("#btnGuardar").disabled = true;
+    let slctUsuarios = document.querySelector("#selectUsuarios");
     let url = "/eventos/gestion/horarios/leer";
     let datos = {
-        idusuario: e[e.selectedIndex].dataset.usuarioId
+        idusuario: slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId
     }
     ajax(url, datos, cargarHorarios)
 }
 
 function guardarDatos() {
+    let btnGuardar = document.querySelector("#btnGuardar").disabled = true;
+    let select = document.querySelector("#selectUsuarios").disabled = false;
     if (eventos.length > 0) {
         let idusuario = document.querySelector("#selectUsuarios")[document.querySelector("#selectUsuarios").selectedIndex].dataset.usuarioId;
         let url = "/eventos/gestion/horarios/agregar"
+        let datos = []
         eventos.forEach(function (e) {
             if (e.save === true) {
-                let datos = {
+                let dato = {
                     id: idusuario,
                     fecha: e.fecha,
                     inicio: e.start,
                     fin: e.end,
                     tipo: e.title
                 }
-                ajax(url, datos);
+                datos.push(dato);
             }
+
         })
+        ajax(url, datos, cargarEventos);
+
     } else {
         alert('Nada que guardar!');
     }
@@ -213,10 +286,9 @@ function guardarHorarios(datos) {
 
 function cargarHorarios(eventos) {
     calendar.removeAllEvents();
-    console.log(JSON.parse(eventos))
     let datos = JSON.parse(eventos);
     datos.forEach(function (e) {
-        evento = new Evento(e.id_evento, e.id_turno, e.fecha, e.start, e.end, e.title, false);
+        evento = new Evento(e.id_evento, e.id_turno, e.fecha, e.start, e.end, e.title, false, "#006cfa");
         aniadirEvento(evento);
     })
 
@@ -237,3 +309,4 @@ function allStorage() {
     }
     return values;
 }
+
