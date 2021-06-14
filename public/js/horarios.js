@@ -37,16 +37,27 @@ document.addEventListener('DOMContentLoaded', function () {
         selectable: true,
         editable: false,
         dateClick: function (info) {
-            if (slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId != "null") {
-                pulsarDia(info)
-            } else {
-                btnGuardar.disabled = true;
-                crearModalMensaje("Advertencia", "Debes seleccionar un usuario antes de editar el horario!")
+            if (info.dateStr > moment(Date.now()).format('YYYY-MM-DD')) {
+                console.log("yes")
+
+                if (slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId != "null") {
+                    pulsarDia(info)
+                } else {
+                    btnGuardar.disabled = true;
+                    crearModalMensaje("Advertencia", "Debes seleccionar un usuario antes de editar el horario!")
+                }
             }
         },
         eventClick: function (calEvent) {
-            pulsarEvento(calEvent);
+            let eventoFecha = moment(Date.parse(calEvent.event.start)).format("YYYY-MM-DD");
+            if (eventoFecha > moment(Date.now()).format('YYYY-MM-DD')) {
+                pulsarEvento(calEvent);
+            }
         },
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+        }
 
     });
     cargarPredefinidos();
@@ -118,7 +129,11 @@ function editarEvento(calEvent) {
     /*Editar Evento*/
     eventos[index].start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
     eventos[index].end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
-    eventos[index].save = "edit";
+    if (eventos[index].save != "true") {
+        eventos[index].save = "edit";
+    }
+    console.log(eventos)
+
 }
 
 function borrarEvento(calEvent) {
@@ -140,9 +155,11 @@ function aniadirEvento(evento) {
         title: evento.title,
         start: evento.fecha + " " + evento.start,
         end: evento.fecha + " " + evento.end,
-        color: evento.color
+        color: evento.color,
+
     });
     eventos.push(evento);
+    console.log(eventos);
 }
 
 /*Funciones para el Modal*/
@@ -417,6 +434,7 @@ function guardarHorarios(datos) {
 }
 
 function cargarHorarios(eventos) {
+
     calendar.removeAllEvents();
     let datos = JSON.parse(eventos);
     datos.forEach(function (e) {
