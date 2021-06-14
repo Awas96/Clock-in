@@ -28,10 +28,11 @@ document.addEventListener('DOMContentLoaded', function () {
             right: 'title',
             center: ''
         },
+        droppable: false,
         locale: 'es',
         initialView: 'dayGridMonth',
         selectable: true,
-        editable: true,
+        editable: false,
         dateClick: function (info) {
             if (slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId != "null") {
                 pulsarDia(info)
@@ -40,6 +41,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 crearModalMensaje("Advertencia", "Debes seleccionar un usuario antes de editar el horario!")
             }
         },
+        eventClick: function (calEvent) {
+            pulsarEvento(calEvent);
+        },
+
     });
     getHorarios();
     calendar.render();
@@ -51,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
     prevButton.addEventListener("click", function () {
         {
             num--
-            console.log(num)
             if (num == -2) {
                 if (document.querySelector("#btnGuardar").disabled == false) {
                     crearModalMensaje("Advertencia", "Se perderan todos los datos guardados", "Aceptar", "Cancelar", cargarEventos, volverAMesAtras)
@@ -64,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
     nextButton.addEventListener("click", function () {
         {
             num++
-            console.log(num)
             if (num == 2) {
                 if (document.querySelector("#btnGuardar").disabled == false) {
                     crearModalMensaje("Advertencia", "Se perderan todos los datos guardados", "Aceptar", "Cancelar", cargarEventos, volverAMesAlante)
@@ -89,16 +92,45 @@ function agregarNuevoEvento(info) {
     evento.start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
     evento.end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
     evento.title = "Turno";
-    evento.save = true;
+    evento.save = "true";
     evento.color = "#ffaa03"
     let titulo = document.querySelector("#modal-title");
     titulo.innerText = "Evento de dia:  " + info.dateStr;
     aniadirEvento(evento);
 }
 
-function aniadirEvento(evento) {
+function editarEvento(calEvent) {
+    let indice = document.querySelector("#modal-hora").selectedIndex;
+    /*Gestion de visual*/
 
+    let evento = eventos.findIndex(elemento => elemento.id = calEvent.event.id);
+
+    var index = eventos.findIndex(function (e) {
+        return e.id_evento == calEvent.event.id
+    });
+
+    /* Editar Graficos*/
+    calEvent.el.childNodes[0].style = "border-color: #00a435";
+    calEvent.el.childNodes[1].innerText = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
+    /*Editar Evento*/
+    eventos[index].start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
+    eventos[index].end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
+    eventos[index].save = "edit";
+}
+
+function borrarEvento(calEvent) {
+
+    var index = eventos.findIndex(function (e) {
+        return e.id_evento == calEvent.event.id
+    });
+
+    calEvent.el.childNodes[0].style = "border-color: #9f0000";
+    eventos[index].save = "delete";
+}
+
+function aniadirEvento(evento) {
     calendar.addEvent({
+        id: evento.id_evento,
         title: evento.title,
         start: evento.fecha + " " + evento.start,
         end: evento.fecha + " " + evento.end,
@@ -114,6 +146,11 @@ function pulsarDia(info) {
     crearModalDia(info);
     $('#Modal').modal()
 
+}
+
+function pulsarEvento(calEvent) {
+    crearModalEvento(calEvent);
+    $('#Modal').modal()
 }
 
 function limpiaModal() {
@@ -161,6 +198,54 @@ function crearModalDia(info) {
 
 }
 
+function crearModalEvento(calEvent) {
+    limpiaModal();
+    /*Titulo*/
+    document.querySelector(".modal-title").innerText = "Editar evento para día " + eventos.find(elemento => elemento.id = calEvent.event.id).fecha;
+    /*Cuerpo*/
+    let cuerpo = document.querySelector(".modal-body");
+    let titulo = document.createElement("p");
+    titulo.innerText = "Editar dia de trabajo para usuario " + document.querySelector('[data-usuario-username]').innerText;
+    let selector = document.createElement("p");
+    selector.innerText = "Seleccione un horario:";
+
+    cuerpo.appendChild(titulo);
+    cuerpo.appendChild(selector);
+    let select = rellenarHorariosSelect();
+    cuerpo.appendChild(select);
+
+
+    /*Pie*/
+    let footer = document.querySelector(".modal-footer");
+    let btnCancelar = document.createElement("button");
+    let btnBorrar = document.createElement("button");
+    let btnAceptar = document.createElement("button");
+    btnCancelar.classList.add("btn", "btn-secondary");
+    btnCancelar.textContent = "Cancelar";
+    btnCancelar.dataset.dismiss = "modal";
+    btnBorrar.classList.add("btn", "btn-danger");
+    btnBorrar.textContent = "Borrar";
+    btnBorrar.dataset.dismiss = "modal";
+    btnAceptar.classList.add("btn", "btn-primary");
+    btnAceptar.dataset.dismiss = "modal";
+    btnAceptar.textContent = "Aceptar"
+    btnAceptar.addEventListener("click", function () {
+        document.querySelector("#btnGuardar").disabled = false;
+        document.querySelector("#selectUsuarios").disabled = true;
+        editarEvento(calEvent);
+    });
+    btnBorrar.addEventListener("click", function () {
+        document.querySelector("#btnGuardar").disabled = false;
+        document.querySelector("#selectUsuarios").disabled = true;
+        borrarEvento(calEvent);
+    });
+    footer.appendChild(btnCancelar);
+    footer.appendChild(btnBorrar);
+    footer.appendChild(btnAceptar);
+
+
+}
+
 function crearModalGuardar(info) {
     limpiaModal();
     let ok = false;
@@ -184,7 +269,7 @@ function crearModalGuardar(info) {
     btnAceptar.textContent = "Aceptar"
     btnAceptar.addEventListener("click", function () {
         guardarDatos();
-        crearModalMensaje("Mensaje", "Datos guardados correctamente!");
+        crearModalMensaje("Mensaje", "Datos modificados correctamente!");
     })
     footer.appendChild(btnCancelar);
     footer.appendChild(btnAceptar);
@@ -269,13 +354,16 @@ function guardarDatos() {
         let url = "/eventos/gestion/horarios/agregar"
         let datos = []
         eventos.forEach(function (e) {
-            if (e.save === true) {
+            if (e.save !== "false") {
                 let dato = {
                     id: idusuario,
+                    id_evento: e.id_evento,
+                    id_turno: e.id_turno,
                     fecha: e.fecha,
                     inicio: e.start,
                     fin: e.end,
-                    tipo: e.title
+                    tipo: e.title,
+                    accion: e.save
                 }
                 datos.push(dato);
             }
@@ -327,7 +415,7 @@ function cargarHorarios(eventos) {
     calendar.removeAllEvents();
     let datos = JSON.parse(eventos);
     datos.forEach(function (e) {
-        evento = new Evento(e.id_evento, e.id_turno, e.fecha, e.start, e.end, e.title, false, "#006cfa");
+        evento = new Evento(e.id_evento, e.id_turno, e.fecha, e.start, e.end, e.title, "false", "#006cfa");
         aniadirEvento(evento);
     })
 

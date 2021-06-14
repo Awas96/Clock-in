@@ -67,31 +67,55 @@ class EventosController extends AbstractController
      * @Route("/gestion/horarios/agregar", name="gestiona_horarios_agregar")
      */
     public
-    function agregar(Request $request, UsuarioRepository $usuarioRepository, Evento $evento = null, Turno $turno = null): Response
+    function agregar(Request $request, UsuarioRepository $usuarioRepository, TurnoRepository $turnoRepository, EventoRepository $eventoRepository, Evento $evento = null, Turno $turno = null): Response
     {
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
             if (!empty($content)) {
                 $datos = json_decode($content, true);
                 foreach ($datos as $params) {
+                    dump($params);
                     if ($params["tipo"] == "Turno") {
                         $id = $params["id"];
                         $fecha = new Datetime(date('Y-m-d', strtotime($params["fecha"])));
                         $inicio = new Datetime(date('H:i', strtotime($params['inicio'])));
                         $fin = new Datetime(date('H:i', strtotime($params['fin'])));
+                        $guardar = $params["accion"];
+
                         $em = $this->getDoctrine()->getManager();
-                        $evento = new Evento();
-                        $evento->setFecha($fecha);
-                        $evento->setUsuario($usuarioRepository->findByID($id));
-                        $em->persist($evento);
-                        $em->flush();
-                        $turno = new Turno();
-                        $turno->setHoraInicio($inicio);
-                        $turno->setHoraFin($fin);
-                        $turno->setEvento($evento);
-                        $em->persist($evento);
-                        $em->persist($turno);
-                        $em->flush();
+                        if ($guardar == "true") {
+                            $evento = new Evento();
+                            $evento->setFecha($fecha);
+                            $evento->setUsuario($usuarioRepository->findByID($id));
+                            $em->persist($evento);
+                            $em->flush();
+                            $turno = new Turno();
+                            $turno->setHoraInicio($inicio);
+                            $turno->setHoraFin($fin);
+                            $turno->setEvento($evento);
+                            $em->persist($evento);
+                            $em->persist($turno);
+                            $em->flush();
+                        } elseif ($guardar == "edit") {
+                            $idEvento = $params["id_evento"];
+                            $idTurno = $params["id_turno"];
+                            $turno = $turnoRepository->findById($idTurno);
+                            $turno->setHoraInicio($inicio);
+                            $turno->setHoraFin($fin);
+                            $em->persist($turno);
+                            $em->flush();
+                        } elseif ($guardar == "delete") {
+                            $idEvento = $params["id_evento"];
+                            $idTurno = $params["id_turno"];
+                            $evento = $eventoRepository->findById($idEvento);
+                            $turno = $turnoRepository->findById($idTurno);
+                            $em->remove($turno);
+                            if ($evento->getTurno()->count() <= 0) {
+                                $em->remove($evento);
+                            }
+                            $em->flush();
+                        }
+
                     }
                 }
 
