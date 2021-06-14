@@ -160,7 +160,6 @@ function aniadirEvento(evento) {
 
     });
     eventos.push(evento);
-    console.log(eventos);
 }
 
 /*Funciones para el Modal*/

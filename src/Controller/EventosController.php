@@ -32,6 +32,19 @@ class EventosController extends AbstractController
     }
 
     /**
+     * @Route("/gestion/horario", name="gestiona_horario_personal")
+     */
+    public function base_usuario(UsuarioRepository $usuarioRepository): Response
+    {
+        $usuarios = $usuarioRepository->findByID($this->getUser()->getId());
+        dump($usuarios);
+        return $this->render('eventos/gestiona_horario.html.twig', [
+            'usuarios' => $usuarios,
+            'controller_name' => 'EventosController',
+        ]);
+    }
+
+    /**
      * @Route("/gestion/horarios/leer", name="gestiona_horarios_leer")
      */
     public function recoger(Request $request, EventoRepository $eventoRepository, TurnoRepository $turnoRepository): Response
