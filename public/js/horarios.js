@@ -117,24 +117,19 @@ function editarEvento(calEvent) {
     /*Gestion de visual*/
 
     let evento = eventos.findIndex(elemento => elemento.id = calEvent.event.id);
-    console.log(calEvent.event.start)
     let index = eventos.findIndex(function (e) {
         return e.fecha == moment(Date.parse(calEvent.event.start)).format("YYYY-MM-DD");
     });
-    console.log(index)
     /* Editar Graficos*/
     calEvent.el.childNodes[0].style = "border-color: #00a435";
 
     calEvent.event.setStart(new Date(eventos[index].fecha + " " + document.querySelectorAll("#modal-hora option")[indice].dataset.hInit));
-    console.log(new Date(eventos[index].fecha + " " + document.querySelectorAll("#modal-hora option")[indice].dataset.hInit));
     /*Editar Evento*/
     eventos[index].start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
     eventos[index].end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
     if (eventos[index].save != "true") {
         eventos[index].save = "edit";
     }
-    console.log(calEvent.event.start)
-    console.log(eventos)
 }
 
 function borrarEvento(calEvent) {
@@ -163,7 +158,7 @@ function aniadirEvento(evento) {
 
     });
     eventos.push(evento);
-    console.log(eventos);
+    console.log(eventos)
 }
 
 /*Funciones para el Modal*/
@@ -443,6 +438,7 @@ function cargarHorarios(eventos) {
         evento = new Evento(e.id_evento, e.id_turno, e.fecha, e.start, e.end, e.title, "false", "#006cfa");
         aniadirEvento(evento);
     })
+
 
 }
 
