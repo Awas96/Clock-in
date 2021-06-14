@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
             minute: '2-digit',
         }
 
+
     });
     cargarPredefinidos();
     calendar.render();
@@ -116,27 +117,29 @@ function editarEvento(calEvent) {
     /*Gestion de visual*/
 
     let evento = eventos.findIndex(elemento => elemento.id = calEvent.event.id);
-
-    var index = eventos.findIndex(function (e) {
-        return e.id_evento == calEvent.event.id
+    console.log(calEvent.event.start)
+    let index = eventos.findIndex(function (e) {
+        return e.fecha == moment(Date.parse(calEvent.event.start)).format("YYYY-MM-DD");
     });
-
+    console.log(index)
     /* Editar Graficos*/
     calEvent.el.childNodes[0].style = "border-color: #00a435";
-    calEvent.el.childNodes[1].innerText = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
+
+    calEvent.event.setStart(new Date(eventos[index].fecha + " " + document.querySelectorAll("#modal-hora option")[indice].dataset.hInit));
+    console.log(new Date(eventos[index].fecha + " " + document.querySelectorAll("#modal-hora option")[indice].dataset.hInit));
     /*Editar Evento*/
     eventos[index].start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
     eventos[index].end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
     if (eventos[index].save != "true") {
         eventos[index].save = "edit";
     }
-
+    console.log(calEvent.event.start)
+    console.log(eventos)
 }
 
 function borrarEvento(calEvent) {
-
-    var index = eventos.findIndex(function (e) {
-        return e.id_evento == calEvent.event.id
+    let index = eventos.findIndex(function (e) {
+        return e.fecha == moment(Date.parse(calEvent.event.start)).format("YYYY-MM-DD");
     });
     /* Editar Graficos*/
     calEvent.el.childNodes[0].style = "border-color: #9f0000";
@@ -160,6 +163,7 @@ function aniadirEvento(evento) {
 
     });
     eventos.push(evento);
+    console.log(eventos);
 }
 
 /*Funciones para el Modal*/
@@ -197,7 +201,6 @@ function crearModalDia(info) {
     cuerpo.appendChild(selector);
     let select = rellenarHorariosSelect();
     cuerpo.appendChild(select);
-
 
     /*Pie*/
     let footer = document.querySelector(".modal-footer");
