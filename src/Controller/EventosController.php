@@ -48,7 +48,6 @@ class EventosController extends AbstractController
                 $endDate->setTime(0, 0, 0);
                 $enEventos = ($eventoRepository->findByUsIdAndDate($params["idusuario"], $startDate->format("Y-m-d"), $endDate->format("Y-m-d")));
                 $eventos = array();
-                dump($enEventos);
                 foreach ($enEventos as $ev) {
                     $enTurnos = ($turnoRepository->findByEvento($ev->getId()));
                     foreach ($enTurnos as $et) {
@@ -58,7 +57,6 @@ class EventosController extends AbstractController
             }
             return new JsonResponse($eventos);
         }
-
         return new Response('Error!', 400);
     }
 
@@ -74,7 +72,6 @@ class EventosController extends AbstractController
             if (!empty($content)) {
                 $datos = json_decode($content, true);
                 foreach ($datos as $params) {
-                    dump($params);
                     if ($params["tipo"] == "Turno") {
                         $id = $params["id"];
                         $fecha = new Datetime(date('Y-m-d', strtotime($params["fecha"])));

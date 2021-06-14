@@ -38,8 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
         editable: false,
         dateClick: function (info) {
             if (info.dateStr > moment(Date.now()).format('YYYY-MM-DD')) {
-                console.log("yes")
-
                 if (slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId != "null") {
                     pulsarDia(info)
                 } else {
@@ -130,7 +128,6 @@ function editarEvento(calEvent) {
     eventos[index].start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
     eventos[index].end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
     if (eventos[index].save != "true") {
-
         eventos[index].save = "edit";
     }
 

@@ -5,16 +5,16 @@
     <link rel="stylesheet" href="{{ asset('css/tabla.css') }}">
 {% endblock %}
 {% block javascripts %}
-    <script src="{{ asset('js/tabla.js') }}"
+    <script src="{{ asset('js/tabla.js') }}"></script>
 {% endblock %}
 {% block content %}
     <div class="container">
-        <h1 class="listados_titulo">Gestionar Usuarios</h1>
+        <h1 class="listados_titulo">Gestión de Usuarios</h1>
         <div class="row">
             <div class="col">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <div><h3 class="panel-title">Usuarios</h3></div>
+                        <div><h3 class="panel-title">Turnos</h3></div>
                         <div class="pull-right">
 							<span class="clickable filter" data-toggle="tooltip" title="Toggle table filter"
                                   data-container="body">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="panel-body">
                         <input type="text" class="form-control" id="dev-table-filter" data-action="filter"
-                               data-filters="#dev-table" placeholder="Filtrar por NIF"/>
+                               data-filters="#dev-table" placeholder="Filtrar por inicio"/>
                     </div>
                     <div class="panel-table">
                         {% include 'usuarios/usuarios_tabla.partial.html.twig' %}
@@ -35,6 +35,7 @@
     </div>
     </div>
     </div>
+
 
 {% endblock %}
 

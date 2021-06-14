@@ -25,7 +25,6 @@ class EventoRepository extends ServiceEntityRepository
 
     public function findByUsIdAndDate($id, $start, $end)
     {
-        dump($end);
         $query = $this->createQueryBuilder('e')
             ->andWhere('e.usuario = :val')
             ->andwhere('e.fecha BETWEEN :start AND :end')
@@ -35,7 +34,6 @@ class EventoRepository extends ServiceEntityRepository
             ->orderBy('e.fecha', 'ASC')
             ->getQuery()
             ->getResult();
-        dump($query);
         return $query;
     }
 
