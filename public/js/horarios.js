@@ -12,10 +12,13 @@ function Evento(id_evento, id_turno, fecha, start, end, title, save, color) {
     this.color = color;
 }
 
+/* num maneja el movimiento con los meses para avisar al usuario si se van a borrar los cambios por recargar los eventos*/
 var num = 0;
+/* array de eventos que vamos a  usar para luego enviarlos al backend*/
 var eventos = [];
 
 /* Funciones */
+/* Funcion principal carga el calendario y disponde de algunos eventos de la UI*/
 document.addEventListener('DOMContentLoaded', function () {
     let btnGuardar = document.querySelector("#btnGuardar");
     let slctUsuarios = document.querySelector("#selectUsuarios");
@@ -46,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
     });
-    getHorarios();
+    cargarPredefinidos();
     calendar.render();
     let prevButton = document.querySelector(".fc-prev-button")
     let nextButton = document.querySelector(".fc-next-button")
@@ -81,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btnGuardar.addEventListener("click", crearModalGuardar);
 });
 
-/* funciones por determinar*/
+/* funciones de altas y bajas que se usan para luego guardar los datos */
 
 function agregarNuevoEvento(info) {
     let evento = new Evento();
@@ -123,10 +126,13 @@ function borrarEvento(calEvent) {
     var index = eventos.findIndex(function (e) {
         return e.id_evento == calEvent.event.id
     });
-
+    /* Editar Graficos*/
     calEvent.el.childNodes[0].style = "border-color: #9f0000";
+    /*Editar Evento*/
     eventos[index].save = "delete";
 }
+
+/*Funcion que agrega el evento al calendario Full Calendara para asi mostrarse, aparte añade ese evento al array de eventos para luego pasarlos*/
 
 function aniadirEvento(evento) {
     calendar.addEvent({
@@ -138,7 +144,6 @@ function aniadirEvento(evento) {
     });
     eventos.push(evento);
 }
-
 
 /*Funciones para el Modal*/
 
@@ -276,6 +281,9 @@ function crearModalGuardar(info) {
     $('#Modal').modal()
 }
 
+/* Funcion de modal generica que asigna una cabecera, un mensaje y te permite añadir dos funciones con eventos y un parametro extra para el segundo boton (que normalmente suele ser cancelar)*/
+
+/* El extra es utiliza en el segundo boton para opciones de volver atras por ejemplo */
 function crearModalMensaje(cabecera, mensaje, btnmsg1 = "Aceptar", btnmsg2 = null, callback1, callback2, extra) {
     limpiaModal();
     /*Titulo*/
@@ -376,12 +384,10 @@ function guardarDatos() {
     }
 }
 
-
-function getHorarios() {
+function cargarPredefinidos() {
     let url = '/turnos/predefinidos/get';
     ajax(url, null, guardarHorarios);
 }
-
 
 function ajax(url, data = null, callback = null) {
 
@@ -400,7 +406,6 @@ function ajax(url, data = null, callback = null) {
 }
 
 /* funciones callback tras llamada a datos*/
-
 
 function guardarHorarios(datos) {
     datos = JSON.parse(datos);
