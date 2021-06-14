@@ -130,9 +130,9 @@ function editarEvento(calEvent) {
     eventos[index].start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
     eventos[index].end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
     if (eventos[index].save != "true") {
+
         eventos[index].save = "edit";
     }
-    console.log(eventos)
 
 }
 
@@ -144,7 +144,11 @@ function borrarEvento(calEvent) {
     /* Editar Graficos*/
     calEvent.el.childNodes[0].style = "border-color: #9f0000";
     /*Editar Evento*/
-    eventos[index].save = "delete";
+    if (eventos[index].save == "true" || eventos[index].save == "edit") {
+        eventos[index].save = "false";
+    } else {
+        eventos[index].save = "delete";
+    }
 }
 
 /*Funcion que agrega el evento al calendario Full Calendara para asi mostrarse, aparte añade ese evento al array de eventos para luego pasarlos*/
@@ -392,7 +396,6 @@ function guardarDatos() {
                 }
                 datos.push(dato);
             }
-
         })
         ajax(url, datos, cargarEventos);
 
