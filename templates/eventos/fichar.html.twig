@@ -1,0 +1,26 @@
+{% extends 'layout.html.twig' %}
+
+{% block estilos %}
+    <link rel="stylesheet" href="{{ asset('css/fichar.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.css">
+{% endblock %}
+
+{% block title %}Carta{% endblock %}
+
+{% block content %}
+    <div class="fichar_contenedor">
+        <div id="divHora" class="fichar_hora"></div>
+
+
+        <div id="userdata" class="fichar_datos">
+            <p>{{ app.user.username }}</p>
+            <p>{{ app.user.nif }}</p>
+            <p>{{ app.user.email }}</p>
+            <p>{{ app.user.roles | first }}</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/reloj.js') }}"></script>
+{% endblock %}

@@ -135,4 +135,17 @@ class EventosController extends AbstractController
         }
         return new Response('Error!', 400);
     }
+
+    /**
+     * @Route("/fichar", name="fichar")
+     */
+    public function fichaje(UsuarioRepository $usuarioRepository): Response
+    {
+        $usuario = $usuarioRepository->findByID($this->getUser()->getId());
+        return $this->render('eventos/fichar.html.twig', [
+            'usuario' => $usuario,
+            'controller_name' => 'EventosController',
+        ]);
+    }
+
 }
