@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         selectable: true,
         editable: false,
         dateClick: function (info) {
-            if (info.dateStr > moment(Date.now()).format('YYYY-MM-DD')) {
+            if (info.dateStr >= moment(Date.now()).format('YYYY-MM-DD')) {
                 if (slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId != "null") {
                     pulsarDia(info)
                 } else {

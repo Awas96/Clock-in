@@ -22,7 +22,7 @@ class EventosController extends AbstractController
     /**
      * @Route("/gestion/horarios", name="gestiona_horarios")
      */
-    public function base(UsuarioRepository $usuarioRepository): Response
+    public function indexEventos(UsuarioRepository $usuarioRepository): Response
     {
         $usuarios = $usuarioRepository->findAll();
         return $this->render('eventos/base.html.twig', [
@@ -139,10 +139,22 @@ class EventosController extends AbstractController
     /**
      * @Route("/fichar", name="fichar")
      */
-    public function fichaje(UsuarioRepository $usuarioRepository): Response
+    public function fichaje(UsuarioRepository $usuarioRepository, EventoRepository $eventoRepository, TurnoRepository $turnoRepository): Response
     {
         $usuario = $usuarioRepository->findByID($this->getUser()->getId());
+        $finic = date("Y-m-d");
+        $ffin = date("Y-m-d");
+        $fecha = $eventoRepository->findByUsIdAndDate($usuario,$finic,$ffin);
+        if( $fecha != null) {
+            $turnos = $turnoRepository->findByEvento($fecha[0]->getId());
+            dump($turnos);
+        }
+
+
+
         return $this->render('eventos/fichar.html.twig', [
+            'evento' => $fecha[0],
+            'turnos' => $turnos,
             'usuario' => $usuario,
             'controller_name' => 'EventosController',
         ]);

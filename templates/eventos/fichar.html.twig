@@ -18,6 +18,15 @@
             <p>{{ app.user.email }}</p>
             <p>{{ app.user.roles | first }}</p>
         </div>
+
+        <div id="fichar" class="fichar_botones">
+            <p> Turno: </p>
+            {% for i in turnos %}
+                <p>{{ i.horaInicio | format_time(locale='es', pattern="HH:mm") }} ~ {{ i.horaFin | format_time(locale='es', pattern="HH:mm") }}
+                </p>
+            {% endfor %}
+            <button class="btn btn-primary fichar_boton">Fichar</button>
+        </div>
     </div>
 {% endblock %}
 
