@@ -383,8 +383,8 @@ function guardarDatos() {
                     id_evento: e.id_evento,
                     id_turno: e.id_turno,
                     fecha: e.fecha,
-                    inicio: e.start,
-                    fin: e.end,
+                    inicio: e.fecha + " " + e.start,
+                    fin: e.fecha + " " + e.end,
                     tipo: e.title,
                     accion: e.save
                 }

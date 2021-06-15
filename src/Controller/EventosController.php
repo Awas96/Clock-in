@@ -59,7 +59,7 @@ class EventosController extends AbstractController
 
                 $endDate = \DateTime::createFromFormat('d-n-Y', "01-" . ($params["mes"] + 2) . "-" . $params["anno"]);
                 $endDate->setTime(0, 0, 0);
-                $enEventos = ($eventoRepository->findByUsIdAndDate($params["idusuario"], $startDate->format("Y-m-d"), $endDate->format("Y-m-d")));
+                $enEventos = ($eventoRepository->findByUsIdAndDates($params["idusuario"], $startDate->format("Y-m-d"), $endDate->format("Y-m-d")));
                 $eventos = array();
                 foreach ($enEventos as $ev) {
                     $enTurnos = ($turnoRepository->findByEvento($ev->getId()));
@@ -88,10 +88,12 @@ class EventosController extends AbstractController
                     if ($params["tipo"] == "Turno") {
                         $id = $params["id"];
                         $fecha = new Datetime(date('Y-m-d', strtotime($params["fecha"])));
-                        $inicio = new Datetime(date('H:i', strtotime($params['inicio'])));
-                        $fin = new Datetime(date('H:i', strtotime($params['fin'])));
+                        $inicio = new Datetime(date('Y-m-d H:i', strtotime($params['inicio'])));
+                        $fin = new Datetime(date('Y-m-d  H:i', strtotime($params['fin'])));
                         $guardar = $params["accion"];
-
+                        dump($params["inicio"]);
+                        dump($inicio);
+                        dump($fin);
                         $em = $this->getDoctrine()->getManager();
                         if ($guardar == "true") {
                             $evento = new Evento();
@@ -142,14 +144,13 @@ class EventosController extends AbstractController
     public function fichaje(UsuarioRepository $usuarioRepository, EventoRepository $eventoRepository, TurnoRepository $turnoRepository): Response
     {
         $usuario = $usuarioRepository->findByID($this->getUser()->getId());
-        $finic = date("Y-m-d");
-        $ffin = date("Y-m-d");
-        $fecha = $eventoRepository->findByUsIdAndDate($usuario,$finic,$ffin);
-        if( $fecha != null) {
+        $fecha = date("Y-m-d");
+        $fecha = $eventoRepository->findByUsIdAndDate($usuario, $fecha);
+        dump($fecha);
+        if ($fecha != null) {
             $turnos = $turnoRepository->findByEvento($fecha[0]->getId());
             dump($turnos);
         }
-
 
 
         return $this->render('eventos/fichar.html.twig', [

@@ -23,7 +23,7 @@ class EventoRepository extends ServiceEntityRepository
     //  * @return Evento[] Returns an array of Evento objects
     //  */
 
-    public function findByUsIdAndDate($id, $start, $end)
+    public function findByUsIdAndDates($id, $start, $end)
     {
         $query = $this->createQueryBuilder('e')
             ->andWhere('e.usuario = :val')
@@ -37,6 +37,18 @@ class EventoRepository extends ServiceEntityRepository
         return $query;
     }
 
+    public function findByUsIdAndDate($id, $start)
+    {
+        $query = $this->createQueryBuilder('e')
+            ->andWhere('e.usuario = :val')
+            ->andwhere('e.fecha LIKE :start')
+            ->setParameter('val', $id)
+            ->setParameter('start', $start)
+            ->orderBy('e.fecha', 'ASC')
+            ->getQuery()
+            ->getResult();
+        return $query;
+    }
 
     public function findById($value): ?Evento
     {
