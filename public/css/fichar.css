@@ -6,12 +6,29 @@
 }
 
 .fichar_hora {
+
+    padding: 1.5em;
+    border-radius: 7px;
+    background-color: rgba(0, 0, 0, 0.2);
     font-size: 2.5rem;
     font-weight: bolder;
+}
+
+.fichar_botones {
+    margin-top: 1em;
+    line-height: 1.5em;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.fichar_boton {
+    width: 20em;
+    margin-bottom: 0.5em;
 }
 
 .fichar_datos {
     align-self: center;
     text-align: center;
     line-height: 2em;
+    font-size: 0.8em;
 }

@@ -24,10 +24,10 @@ class Fichaje
     private $hora;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="fichaje")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity=Evento::class, mappedBy="fichaje", cascade={"persist", "remove"})
      */
     private $evento;
+
 
     public function getId(): ?int
     {

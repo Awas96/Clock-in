@@ -63,9 +63,8 @@ class EventosController extends AbstractController
                 $eventos = array();
                 foreach ($enEventos as $ev) {
                     $enTurnos = ($turnoRepository->findByEvento($ev->getId()));
-                    foreach ($enTurnos as $et) {
-                        array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "id_turno" => $et->getId(), "start" => $et->getHoraInicio()->format("H:i"), "end" => $et->getHoraFin()->format("H:i"), "title" => "Turno"]);
-                    }
+                    dump($enTurnos);
+                    array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "id_turno" => $enTurnos->getId(), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "title" => "Turno"]);
                 }
             }
             return new JsonResponse($eventos);
@@ -99,14 +98,13 @@ class EventosController extends AbstractController
                             $evento = new Evento();
                             $evento->setFecha($fecha);
                             $evento->setUsuario($usuarioRepository->findByID($id));
-                            $em->persist($evento);
-                            $em->flush();
                             $turno = new Turno();
                             $turno->setHoraInicio($inicio);
                             $turno->setHoraFin($fin);
                             $turno->setEvento($evento);
-                            $em->persist($evento);
+                            $evento->setTurno($turno);
                             $em->persist($turno);
+                            $em->persist($evento);
                             $em->flush();
                         } elseif ($guardar == "edit") {
                             $idEvento = $params["id_evento"];
@@ -122,10 +120,9 @@ class EventosController extends AbstractController
                             $evento = $eventoRepository->findById($idEvento);
                             $turno = $turnoRepository->findById($idTurno);
                             $em->remove($turno);
-                            if ($evento->getTurno()->count() <= 0) {
-                                $em->remove($evento);
-                            }
+                            $em->remove($evento);
                             $em->flush();
+
                         }
 
                     }
@@ -147,12 +144,11 @@ class EventosController extends AbstractController
         $fecha = date("Y-m-d");
         $fecha = $eventoRepository->findByUsIdAndDate($usuario, $fecha);
         dump($fecha);
-        if ($fecha != null) {
-            $turnos = $turnoRepository->findByEvento($fecha[0]->getId());
-            dump($turnos);
+        $turnos = array();
+        foreach ($fecha as $ev) {
+            array_push($turnos, $turnoRepository->findByEvento($ev->getId()));
         }
-
-
+        dump($turnos);
         return $this->render('eventos/fichar.html.twig', [
             'evento' => $fecha[0],
             'turnos' => $turnos,

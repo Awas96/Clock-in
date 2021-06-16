@@ -22,6 +22,7 @@ var eventos = [];
 document.addEventListener('DOMContentLoaded', function () {
     let btnGuardar = document.querySelector("#btnGuardar");
     let slctUsuarios = document.querySelector("#selectUsuarios");
+    slctUsuarios.selecterIndex = 0;
 
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         eventClick: function (calEvent) {
             let eventoFecha = moment(Date.parse(calEvent.event.start)).format("YYYY-MM-DD");
-            if (eventoFecha > moment(Date.now()).format('YYYY-MM-DD')) {
+            if (eventoFecha >= moment(Date.now()).format('YYYY-MM-DD')) {
                 pulsarEvento(calEvent);
             }
         },

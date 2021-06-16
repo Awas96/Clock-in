@@ -32,24 +32,23 @@ class Evento
     private $usuario;
 
     /**
-     * @ORM\OneToMany(targetEntity=Fichaje::class, mappedBy="evento", orphanRemoval=true)
-     */
-    private $fichaje;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Turno::class, mappedBy="evento", orphanRemoval=true)
-     */
-    private $turno;
-
-    /**
      * @ORM\OneToMany(targetEntity=Incidencia::class, mappedBy="evento", orphanRemoval=true)
      */
     private $incidencia;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Fichaje::class, inversedBy="evento", cascade={"persist", "remove"})
+     */
+    private $fichaje;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Turno::class, mappedBy="evento", cascade={"persist", "remove"})
+     */
+    private $turno;
+
+
     public function __construct()
     {
-        $this->fichaje = new ArrayCollection();
-        $this->turno = new ArrayCollection();
         $this->incidencia = new ArrayCollection();
     }
 
@@ -83,63 +82,35 @@ class Evento
     }
 
     /**
-     * @return Collection|Fichaje[]
+     * @return mixed
      */
-    public function getFichaje(): Collection
-    {
-        return $this->fichaje;
-    }
-
-    public function addFichaje(Fichaje $fichaje): self
-    {
-        if (!$this->fichaje->contains($fichaje)) {
-            $this->fichaje[] = $fichaje;
-            $fichaje->setEvento($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFichaje(Fichaje $fichaje): self
-    {
-        if ($this->fichaje->removeElement($fichaje)) {
-            // set the owning side to null (unless already changed)
-            if ($fichaje->getEvento() === $this) {
-                $fichaje->setEvento(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Turno[]
-     */
-    public function getTurno(): Collection
+    public function getTurno()
     {
         return $this->turno;
     }
 
-    public function addTurno(Turno $turno): self
+    /**
+     * @param mixed $turno
+     */
+    public function setTurno($turno): void
     {
-        if (!$this->turno->contains($turno)) {
-            $this->turno[] = $turno;
-            $turno->setEvento($this);
-        }
-
-        return $this;
+        $this->turno = $turno;
     }
 
-    public function removeTurno(Turno $turno): self
+    /**
+     * @return mixed
+     */
+    public function getFichaje()
     {
-        if ($this->turno->removeElement($turno)) {
-            // set the owning side to null (unless already changed)
-            if ($turno->getEvento() === $this) {
-                $turno->setEvento(null);
-            }
-        }
+        return $this->fichaje;
+    }
 
-        return $this;
+    /**
+     * @param mixed $fichaje
+     */
+    public function setFichaje($fichaje): void
+    {
+        $this->fichaje = $fichaje;
     }
 
     /**
@@ -171,6 +142,5 @@ class Evento
 
         return $this;
     }
-
 
 }

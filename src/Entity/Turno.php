@@ -29,8 +29,7 @@ class Turno
     private $horaFin;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="turno")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity=Evento::class, inversedBy="turno", cascade={"persist", "remove"})
      */
     private $evento;
 
@@ -71,6 +70,23 @@ class Turno
     public function setEvento(?Evento $evento): self
     {
         $this->evento = $evento;
+
+        return $this;
+    }
+
+    public function getEventos(): ?Evento
+    {
+        return $this->eventos;
+    }
+
+    public function setEventos(Evento $eventos): self
+    {
+        // set the owning side of the relation if necessary
+        if ($eventos->getTurno() !== $this) {
+            $eventos->setTurno($this);
+        }
+
+        $this->eventos = $eventos;
 
         return $this;
     }

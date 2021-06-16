@@ -11,22 +11,24 @@
     <div class="fichar_contenedor">
         <div id="divHora" class="fichar_hora"></div>
 
+        <div id="fichar" class="fichar_botones">
+            <p> Turno: </p>
+            {% for i in turnos %}
+                <p>{{ i.horaInicio | format_time(locale='es', pattern="HH:mm") }}
+                    ~ {{ i.horaFin | format_time(locale='es', pattern="HH:mm") }}
+                </p>
+            {% endfor %}
 
+        </div>
+        <div id="divRestante" data-horaInicio=" "></div>
         <div id="userdata" class="fichar_datos">
             <p>{{ app.user.username }}</p>
             <p>{{ app.user.nif }}</p>
             <p>{{ app.user.email }}</p>
-            <p>{{ app.user.roles | first }}</p>
         </div>
 
-        <div id="fichar" class="fichar_botones">
-            <p> Turno: </p>
-            {% for i in turnos %}
-                <p>{{ i.horaInicio | format_time(locale='es', pattern="HH:mm") }} ~ {{ i.horaFin | format_time(locale='es', pattern="HH:mm") }}
-                </p>
-            {% endfor %}
-            <button class="btn btn-primary fichar_boton">Fichar</button>
-        </div>
+        <button class="btn btn-primary fichar_boton">Fichar</button>
+        <button class="btn btn-secondary fichar_boton">Salir</button>
     </div>
 {% endblock %}
 

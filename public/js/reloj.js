@@ -7,7 +7,9 @@ function main() {
         var date;
         date = new Date();
         var time = document.getElementById('divHora');
+        var restante = document.getElementById('divRestante');
         time.innerHTML = date.toLocaleTimeString();
+        restante.innerHTML = date.toLocaleTimeString();
     }
 }
 
