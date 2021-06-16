@@ -13,7 +13,8 @@ function fichar() {
         let url = "/eventos/fichaje/nuevo";
         data = {
             id_evento: document.querySelector("#turno").dataset.id,
-            hora_fichaje: moment().format("YYYY-MM-DD HH:mm:ss")
+            hora_fichaje: moment().format("YYYY-MM-DD HH:mm:ss"),
+            estado: document.querySelector(".fichar_boton").dataset.state
         }
         ajax(url, data, fichado);
     }
@@ -38,9 +39,12 @@ function ajax(url, data = null, callback = null) {
 
 function fichado() {
     let btnFichar = document.querySelector(".fichar_boton");
-    btnFichar.disabled = true;
+
     btnFichar.classList.remove("btn-primary");
     btnFichar.classList.add("btn-danger");
+
+    btnFichar.innerText = "Salir";
+    btnFichar.dataset.state = 1;
 
     let divRestante = document.querySelector("#divRestante");
     divRestante.id = ""

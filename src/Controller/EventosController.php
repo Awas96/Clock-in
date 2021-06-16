@@ -141,24 +141,24 @@ class EventosController extends AbstractController
         $fecha = date("Y-m-d");
         $fecha = $eventoRepository->findByUsIdAndDate($usuario, $fecha);
         $turnos = array();
+        $estado = 0;
         foreach ($fecha as $ev) {
 
             $turno = $turnoRepository->findByEvento($ev->getId());
             $fichajes = $fichajeRepository->findByEvento($ev);
 
             if ($fichajes != null) {
-
                 if (end($fichajes)->getTipo() == 0) {
-                    dump($fichajes[0]);
-                } else {
-
+                    $estado = 1;
+                    array_push($turnos, $turno);
                 }
+            } else {
                 array_push($turnos, $turno);
             }
         }
-
         sort($turnos);
         return $this->render('eventos/fichar.html.twig', [
+            'estado' => $estado,
             'evento' => $fecha,
             'turnos' => $turnos,
             'usuario' => $usuario,
@@ -178,7 +178,7 @@ class EventosController extends AbstractController
                 $fichaje = new Fichaje();
                 $fichaje->setHora(new \DateTime(date('Y-m-d h:i:s', strtotime($datos["hora_fichaje"]))));
                 $fichaje->setEvento($evento);
-                $fichaje->setTipo(0);
+                $fichaje->setTipo($datos["estado"]);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($fichaje);
                 $em->flush();

@@ -31,7 +31,10 @@
             <p>{{ app.user.email }}</p>
         </div>
         <div class="fichar_botones">
-            <button class="btn btn-primary fichar_boton">Fichar</button>
+            {% if turnos is not  empty %}
+            <button class="btn {% if estado == 0 %}btn-primary{% else %}btn-danger{% endif %} fichar_boton"
+                    data-state="{{ estado }}">{% if estado == 0 %}Entrar {% else %} Salir{% endif %} </button>
+            {% endif %}
             <a href="{{ path('index') }}" class="btn btn-secondary fichar_boton">Salir</a>
         </div>
     </div>
