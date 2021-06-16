@@ -7,7 +7,6 @@ function main() {
         var date;
         date = new Date();
         datehora = new Date("2015-03-25 " + document.querySelector("#turno").dataset.hora)
-        console.log(datehora)
         var time = document.getElementById('divHora');
         var restante = document.getElementById('divRestante');
         time.innerHTML = date.toLocaleTimeString();

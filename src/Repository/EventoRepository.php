@@ -44,7 +44,7 @@ class EventoRepository extends ServiceEntityRepository
             ->andwhere('e.fecha LIKE :start')
             ->setParameter('val', $id)
             ->setParameter('start', $start)
-            ->orderBy('e.fecha', 'DESC')
+            ->orderBy('e.fecha', 'ASC')
             ->getQuery()
             ->getResult();
         return $query;

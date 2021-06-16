@@ -118,12 +118,12 @@ function editarEvento(calEvent) {
     /*Gestion de visual*/
 
     let evento = eventos.findIndex(elemento => elemento.id = calEvent.event.id);
+
     let index = eventos.findIndex(function (e) {
-        return e.fecha == moment(Date.parse(calEvent.event.start)).format("YYYY-MM-DD");
+        return e.fecha + " " + e.start == moment(Date.parse(calEvent.event.start)).format("YYYY-MM-DD HH:mm");
     });
     /* Editar Graficos*/
     calEvent.el.childNodes[0].style = "border-color: #00a435";
-
     calEvent.event.setStart(new Date(eventos[index].fecha + " " + document.querySelectorAll("#modal-hora option")[indice].dataset.hInit));
     /*Editar Evento*/
     eventos[index].start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
@@ -135,7 +135,7 @@ function editarEvento(calEvent) {
 
 function borrarEvento(calEvent) {
     let index = eventos.findIndex(function (e) {
-        return e.fecha == moment(Date.parse(calEvent.event.start)).format("YYYY-MM-DD");
+        return e.fecha + " " + e.start == moment(Date.parse(calEvent.event.start)).format("YYYY-MM-DD HH:mm");
     });
     /* Editar Graficos*/
     calEvent.el.childNodes[0].style = "border-color: #9f0000";
@@ -159,7 +159,6 @@ function aniadirEvento(evento) {
 
     });
     eventos.push(evento);
-    console.log(eventos)
 }
 
 /*Funciones para el Modal*/
