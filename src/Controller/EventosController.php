@@ -151,7 +151,6 @@ class EventosController extends AbstractController
             'evento' => $fecha,
             'turnos' => $turnos,
             'usuario' => $usuario,
-            'controller_name' => 'EventosController',
         ]);
     }
 

@@ -14,7 +14,8 @@
         <div id="fichar" class="fichar_botones">
             <p> Turno: </p>
             {% if turnos is not empty %}
-                <p>{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
+                <p id="turno"
+                   data-hora="{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}">{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
                     ~ {{ turnos[0].horaFin | format_time(locale='es', pattern="HH:mm") }}
                 </p>
             {% else %}
