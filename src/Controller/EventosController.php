@@ -49,7 +49,7 @@ class EventosController extends AbstractController
     /**
      * @Route("/gestion/horarios/leer", name="gestiona_horarios_leer")
      */
-    public function recoger(Request $request, EventoRepository $eventoRepository, TurnoRepository $turnoRepository): Response
+    public function recoger(Request $request, EventoRepository $eventoRepository, TurnoRepository $turnoRepository, FichajeRepository $fichajeRepository): Response
     {
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
@@ -63,8 +63,20 @@ class EventosController extends AbstractController
                 $enEventos = ($eventoRepository->findByUsIdAndDates($params["idusuario"], $startDate->format("Y-m-d"), $endDate->format("Y-m-d")));
                 $eventos = array();
                 foreach ($enEventos as $ev) {
+                    $title = "Evento";
                     $enTurnos = ($turnoRepository->findByEvento($ev->getId()));
-                    array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "id_turno" => $enTurnos->getId(), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "title" => "Turno"]);
+                    $fichajes = $fichajeRepository->findByEvento($ev);
+                    if (!empty($fichajes)) {
+                        if (end($fichajes)->getTipo() == 0) {
+                            $title = "En progreso";
+                        } else {
+                            $title = "Finalizado";
+                        }
+                    } else {
+                        $title = "Sin Fichar";
+                    }
+
+                    array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "id_turno" => $enTurnos->getId(), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "title" => $title]);
                 }
             }
             return new JsonResponse($eventos);
@@ -83,45 +95,52 @@ class EventosController extends AbstractController
             $content = $request->getContent();
             if (!empty($content)) {
                 $datos = json_decode($content, true);
+                dump($datos);
+
                 foreach ($datos as $params) {
-                    if ($params["tipo"] == "Turno") {
-                        $id = $params["id"];
-                        $fecha = new Datetime(date('Y-m-d', strtotime($params["fecha"])));
-                        $inicio = new Datetime(date('Y-m-d H:i', strtotime($params['inicio'])));
-                        $fin = new Datetime(date('Y-m-d  H:i', strtotime($params['fin'])));
-                        $guardar = $params["accion"];
-                        $em = $this->getDoctrine()->getManager();
-                        if ($guardar == "true") {
-                            $evento = new Evento();
-                            $evento->setFecha($fecha);
-                            $evento->setUsuario($usuarioRepository->findByID($id));
-                            $turno = new Turno();
-                            $turno->setHoraInicio($inicio);
-                            $turno->setHoraFin($fin);
-                            $turno->setEvento($evento);
-                            $evento->setTurno($turno);
-                            $em->persist($turno);
-                            $em->persist($evento);
-                            $em->flush();
-                        } elseif ($guardar == "edit") {
-                            $idEvento = $params["id_evento"];
-                            $idTurno = $params["id_turno"];
-                            $turno = $turnoRepository->findById($idTurno);
-                            $turno->setHoraInicio($inicio);
-                            $turno->setHoraFin($fin);
-                            $em->persist($turno);
-                            $em->flush();
-                        } elseif ($guardar == "delete") {
-                            $idEvento = $params["id_evento"];
-                            $idTurno = $params["id_turno"];
-                            $evento = $eventoRepository->findById($idEvento);
-                            $turno = $turnoRepository->findById($idTurno);
-                            $em->remove($turno);
-                            $em->remove($evento);
-                            $em->flush();
+                    dump($params["tipo"]);
+                    dump($params["tipo"] == "Finalizado");
+                    if ($params["tipo"] != "Finalizado") {
+                        if ($params["tipo"] != "En Proceso") {
+
+                            $id = $params["id"];
+                            $fecha = new Datetime(date('Y-m-d', strtotime($params["fecha"])));
+                            $inicio = new Datetime(date('Y-m-d H:i', strtotime($params['inicio'])));
+                            $fin = new Datetime(date('Y-m-d  H:i', strtotime($params['fin'])));
+                            $guardar = $params["accion"];
+                            $em = $this->getDoctrine()->getManager();
+                            if ($guardar == "true") {
+                                $evento = new Evento();
+                                $evento->setFecha($fecha);
+                                $evento->setUsuario($usuarioRepository->findByID($id));
+                                $turno = new Turno();
+                                $turno->setHoraInicio($inicio);
+                                $turno->setHoraFin($fin);
+                                $turno->setEvento($evento);
+                                $evento->setTurno($turno);
+                                $em->persist($turno);
+                                $em->persist($evento);
+                                $em->flush();
+                            } elseif ($guardar == "edit") {
+                                $idEvento = $params["id_evento"];
+                                $idTurno = $params["id_turno"];
+                                $turno = $turnoRepository->findById($idTurno);
+                                $turno->setHoraInicio($inicio);
+                                $turno->setHoraFin($fin);
+                                $em->persist($turno);
+                                $em->flush();
+                            } elseif ($guardar == "delete") {
+                                $idEvento = $params["id_evento"];
+                                $idTurno = $params["id_turno"];
+                                $evento = $eventoRepository->findById($idEvento);
+                                $turno = $turnoRepository->findById($idTurno);
+                                $em->remove($turno);
+                                $em->remove($evento);
+                                $em->flush();
+
+                            }
 
                         }
-
                     }
                 }
 

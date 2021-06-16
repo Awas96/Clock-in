@@ -105,7 +105,7 @@ function agregarNuevoEvento(info) {
     evento.fecha = info.dateStr;
     evento.start = document.querySelectorAll("#modal-hora option")[indice].dataset.hInit;
     evento.end = document.querySelectorAll("#modal-hora option")[indice].dataset.hSal;
-    evento.title = "Turno";
+    evento.title = "Nuevo";
     evento.save = "true";
     evento.color = "#ffaa03"
     let titulo = document.querySelector("#modal-title");
@@ -159,6 +159,7 @@ function aniadirEvento(evento) {
 
     });
     eventos.push(evento);
+    console.log(eventos);
 }
 
 /*Funciones para el Modal*/
