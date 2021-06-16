@@ -15,7 +15,7 @@
             <p> Turno: </p>
             {% if turnos is not empty %}
                 <p id="turno"
-                   data-hora="{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}">{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
+                   data-hora="{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}" data-id="{{ turnos[0].id }}">{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
                     ~ {{ turnos[0].horaFin | format_time(locale='es', pattern="HH:mm") }}
                 </p>
             {% else %}
@@ -23,7 +23,7 @@
             {% endif %}
 
         </div>
-        <div id="divRestante" data-horaInicio=" "></div>
+        <div id="divRestante"></div>
         <div id="userdata" class="fichar_datos">
             <p>{{ app.user.username }}</p>
             <p>{{ app.user.nif }}</p>
@@ -36,5 +36,12 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+            integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script src="{{ asset('js/reloj.js') }}"></script>
 {% endblock %}
+
+
+

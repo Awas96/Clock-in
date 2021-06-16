@@ -6,12 +6,18 @@ function main() {
     function timestamphome() {
         var date;
         date = new Date();
-        datehora = new Date("2015-03-25 " + document.querySelector("#turno").dataset.hora)
+        datehora = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.hora)
         var time = document.getElementById('divHora');
         var restante = document.getElementById('divRestante');
         time.innerHTML = date.toLocaleTimeString();
-        var nueva = datehora - date;
-        restante.innerHTML = new Date(nueva).toLocaleTimeString();
+        var nueva
+        if(date > datehora) {
+            nueva = moment(date - datehora);
+            restante.style = "color: red;";
+        } else {
+            nueva = moment(datehora - date);
+        }
+        restante.innerHTML = nueva.format("HH:mm:ss");
     }
 }
 
