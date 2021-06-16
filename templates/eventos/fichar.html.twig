@@ -13,11 +13,13 @@
 
         <div id="fichar" class="fichar_botones">
             <p> Turno: </p>
-            {% for i in turnos %}
-                <p>{{ i.horaInicio | format_time(locale='es', pattern="HH:mm") }}
-                    ~ {{ i.horaFin | format_time(locale='es', pattern="HH:mm") }}
+            {% if turnos is not empty %}
+                <p>{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
+                    ~ {{ turnos[0].horaFin | format_time(locale='es', pattern="HH:mm") }}
                 </p>
-            {% endfor %}
+            {% else %}
+                <p>No tienes turnos hoy</p>
+            {% endif %}
 
         </div>
         <div id="divRestante" data-horaInicio=" "></div>

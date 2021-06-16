@@ -63,7 +63,6 @@ class EventosController extends AbstractController
                 $eventos = array();
                 foreach ($enEventos as $ev) {
                     $enTurnos = ($turnoRepository->findByEvento($ev->getId()));
-                    dump($enTurnos);
                     array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "id_turno" => $enTurnos->getId(), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "title" => "Turno"]);
                 }
             }
@@ -90,9 +89,6 @@ class EventosController extends AbstractController
                         $inicio = new Datetime(date('Y-m-d H:i', strtotime($params['inicio'])));
                         $fin = new Datetime(date('Y-m-d  H:i', strtotime($params['fin'])));
                         $guardar = $params["accion"];
-                        dump($params["inicio"]);
-                        dump($inicio);
-                        dump($fin);
                         $em = $this->getDoctrine()->getManager();
                         if ($guardar == "true") {
                             $evento = new Evento();
@@ -143,14 +139,16 @@ class EventosController extends AbstractController
         $usuario = $usuarioRepository->findByID($this->getUser()->getId());
         $fecha = date("Y-m-d");
         $fecha = $eventoRepository->findByUsIdAndDate($usuario, $fecha);
-        dump($fecha);
         $turnos = array();
         foreach ($fecha as $ev) {
-            array_push($turnos, $turnoRepository->findByEvento($ev->getId()));
+            $turno = $turnoRepository->findByEvento($ev->getId());
+            if ($ev->getFichaje() == null) {
+                array_push($turnos, $turno);
+            }
         }
-        dump($turnos);
+        rsort($turnos);
         return $this->render('eventos/fichar.html.twig', [
-            'evento' => $fecha[0],
+            'evento' => $fecha,
             'turnos' => $turnos,
             'usuario' => $usuario,
             'controller_name' => 'EventosController',

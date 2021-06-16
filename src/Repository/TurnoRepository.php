@@ -28,7 +28,7 @@ class TurnoRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->andWhere('t.evento = :val')
             ->setParameter('val', $value)
-            ->orderBy('t.id', 'DESC')
+            ->orderBy('t.id', 'ASC')
             ->getQuery()
             ->getOneOrNullResult();
     }
