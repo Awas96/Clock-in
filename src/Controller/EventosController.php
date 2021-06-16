@@ -135,18 +135,28 @@ class EventosController extends AbstractController
     /**
      * @Route("/fichaje", name="fichar")
      */
-    public function fichaje(UsuarioRepository $usuarioRepository, EventoRepository $eventoRepository, TurnoRepository $turnoRepository): Response
+    public function fichaje(UsuarioRepository $usuarioRepository, EventoRepository $eventoRepository, TurnoRepository $turnoRepository, FichajeRepository $fichajeRepository): Response
     {
         $usuario = $usuarioRepository->findByID($this->getUser()->getId());
         $fecha = date("Y-m-d");
         $fecha = $eventoRepository->findByUsIdAndDate($usuario, $fecha);
         $turnos = array();
         foreach ($fecha as $ev) {
+
             $turno = $turnoRepository->findByEvento($ev->getId());
-            if ($ev->getFichaje() == null) {
+            $fichajes = $fichajeRepository->findByEvento($ev);
+
+            if ($fichajes != null) {
+
+                if (end($fichajes)->getTipo() == 0) {
+                    dump($fichajes[0]);
+                } else {
+
+                }
                 array_push($turnos, $turno);
             }
         }
+
         sort($turnos);
         return $this->render('eventos/fichar.html.twig', [
             'evento' => $fecha,
@@ -164,15 +174,17 @@ class EventosController extends AbstractController
             $content = $request->getContent();
             if (!empty($content)) {
                 $datos = json_decode($content, true);
-                dump($datos);
+                $evento = $eventoRepository->findById($datos["id_evento"]);
                 $fichaje = new Fichaje();
                 $fichaje->setHora(new \DateTime(date('Y-m-d h:i:s', strtotime($datos["hora_fichaje"]))));
+                $fichaje->setEvento($evento);
+                $fichaje->setTipo(0);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($fichaje);
-                $evento = $eventoRepository->findById($datos["id_evento"]);
-                $evento->setFichaje($fichaje);
-                $em->persist($evento);
                 $em->flush();
+                dump($fichaje);
+
+
             }
 
             return new JsonResponse("Datos guardados correctamente!");

@@ -24,10 +24,14 @@ class Fichaje
     private $hora;
 
     /**
-     * @ORM\OneToOne(targetEntity=Evento::class, mappedBy="fichaje", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="fichaje")
      */
     private $evento;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $tipo;
 
     public function getId(): ?int
     {
@@ -54,6 +58,18 @@ class Fichaje
     public function setEvento(?Evento $evento): self
     {
         $this->evento = $evento;
+
+        return $this;
+    }
+
+    public function getTipo(): ?int
+    {
+        return $this->tipo;
+    }
+
+    public function setTipo(int $tipo): self
+    {
+        $this->tipo = $tipo;
 
         return $this;
     }

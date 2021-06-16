@@ -36,20 +36,22 @@ class Evento
      */
     private $incidencia;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Fichaje::class, inversedBy="evento", cascade={"persist", "remove"})
-     */
-    private $fichaje;
 
     /**
      * @ORM\OneToOne(targetEntity=Turno::class, mappedBy="evento", cascade={"persist", "remove"})
      */
     private $turno;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Fichaje::class, mappedBy="evento")
+     */
+    private $fichaje;
+
 
     public function __construct()
     {
         $this->incidencia = new ArrayCollection();
+        $this->fichaje = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,22 +100,6 @@ class Evento
     }
 
     /**
-     * @return mixed
-     */
-    public function getFichaje()
-    {
-        return $this->fichaje;
-    }
-
-    /**
-     * @param mixed $fichaje
-     */
-    public function setFichaje($fichaje): void
-    {
-        $this->fichaje = $fichaje;
-    }
-
-    /**
      * @return Collection|Incidencia[]
      */
     public function getIncidencia(): Collection
@@ -137,6 +123,36 @@ class Evento
             // set the owning side to null (unless already changed)
             if ($incidencium->getEvento() === $this) {
                 $incidencium->setEvento(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Fichaje[]
+     */
+    public function getFichaje(): Collection
+    {
+        return $this->fichaje;
+    }
+
+    public function addFichaje(Fichaje $fichaje): self
+    {
+        if (!$this->fichaje->contains($fichaje)) {
+            $this->fichaje[] = $fichaje;
+            $fichaje->setEvento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFichaje(Fichaje $fichaje): self
+    {
+        if ($this->fichaje->removeElement($fichaje)) {
+            // set the owning side to null (unless already changed)
+            if ($fichaje->getEvento() === $this) {
+                $fichaje->setEvento(null);
             }
         }
 

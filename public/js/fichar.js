@@ -39,8 +39,12 @@ function ajax(url, data = null, callback = null) {
 function fichado() {
     let btnFichar = document.querySelector(".fichar_boton");
     btnFichar.disabled = true;
-    alert("Fichado correctamente!");
+    btnFichar.classList.remove("btn-primary");
+    btnFichar.classList.add("btn-danger");
+
     let divRestante = document.querySelector("#divRestante");
+    divRestante.id = ""
+    divRestante.innerHTML = "Fichado <i class='fas fa-check'><i/>"
 
-
+    alert("Fichado correctamente!");
 }
