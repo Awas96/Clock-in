@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Evento;
+use App\Entity\Fichaje;
 use App\Entity\Turno;
 use App\Repository\EventoRepository;
+use App\Repository\FichajeRepository;
 use App\Repository\TurnoRepository;
 use App\Repository\UsuarioRepository;
 use Datetime;
@@ -49,7 +51,6 @@ class EventosController extends AbstractController
      */
     public function recoger(Request $request, EventoRepository $eventoRepository, TurnoRepository $turnoRepository): Response
     {
-        //recoger solo los eventos que nos interesan
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
             if (!empty($content)) {
@@ -132,7 +133,7 @@ class EventosController extends AbstractController
     }
 
     /**
-     * @Route("/fichar", name="fichar")
+     * @Route("/fichaje", name="fichar")
      */
     public function fichaje(UsuarioRepository $usuarioRepository, EventoRepository $eventoRepository, TurnoRepository $turnoRepository): Response
     {
@@ -147,12 +148,37 @@ class EventosController extends AbstractController
             }
         }
         sort($turnos);
-        dump($turnos);
         return $this->render('eventos/fichar.html.twig', [
             'evento' => $fecha,
             'turnos' => $turnos,
             'usuario' => $usuario,
         ]);
     }
+
+    /**
+     * @Route("/fichaje/nuevo", name="fichar_nuevo")
+     */
+    public function fichar(Request $request, FichajeRepository $fichajeRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    {
+        if ($request->isXMLHttpRequest()) {
+            $content = $request->getContent();
+            if (!empty($content)) {
+                $datos = json_decode($content, true);
+                dump($datos);
+                $fichaje = new Fichaje();
+                $fichaje->setHora(new \DateTime(date('Y-m-d h:i:s', strtotime($datos["hora_fichaje"]))));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($fichaje);
+                $evento = $eventoRepository->findById($datos["id_evento"]);
+                $evento->setFichaje($fichaje);
+                $em->persist($evento);
+                $em->flush();
+            }
+
+            return new JsonResponse("Datos guardados correctamente!");
+        }
+        return new Response('Error!', 400);
+    }
+
 
 }

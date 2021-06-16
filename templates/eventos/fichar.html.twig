@@ -9,29 +9,31 @@
 
 {% block content %}
     <div class="fichar_contenedor">
-        <div id="divHora" class="fichar_hora"></div>
+        <div id="divHora" class="fichar_hora"><i class="fas fa-spinner fa-pulse"></i></div>
 
-        <div id="fichar" class="fichar_botones">
+        <div id="fichar" class="fichar_horas">
             <p> Turno: </p>
             {% if turnos is not empty %}
                 <p id="turno"
-                   data-hora="{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}" data-id="{{ turnos[0].id }}">{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
+                   data-hora="{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}"
+                   data-id="{{ turnos[0].id }}">{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
                     ~ {{ turnos[0].horaFin | format_time(locale='es', pattern="HH:mm") }}
                 </p>
             {% else %}
-                <p>No tienes turnos hoy</p>
+                <p>No tienes mas turnos hoy</p>
             {% endif %}
 
         </div>
-        <div id="divRestante"></div>
+        <div id="divRestante"><i class="fas fa-spinner fa-pulse"></i></div>
         <div id="userdata" class="fichar_datos">
             <p>{{ app.user.username }}</p>
             <p>{{ app.user.nif }}</p>
             <p>{{ app.user.email }}</p>
         </div>
-
-        <button class="btn btn-primary fichar_boton">Fichar</button>
-        <button class="btn btn-secondary fichar_boton">Salir</button>
+        <div class="fichar_botones">
+            <button class="btn btn-primary fichar_boton">Fichar</button>
+            <a href="{{ path('index') }}" class="btn btn-secondary fichar_boton">Salir</a>
+        </div>
     </div>
 {% endblock %}
 
@@ -41,6 +43,7 @@
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="{{ asset('js/reloj.js') }}"></script>
+    <script src="{{ asset('js/fichar.js') }}"></script>
 {% endblock %}
 
 

@@ -14,7 +14,7 @@
     font-weight: bolder;
 }
 
-.fichar_botones {
+.fichar_horas {
     margin-top: 1em;
     line-height: 1.5em;
     text-align: center;
@@ -26,7 +26,14 @@
     margin-bottom: 0.5em;
 }
 
+.fichar_botones {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2.5em;
+}
+
 .fichar_datos {
+    margin-top: 5em;
     align-self: center;
     text-align: center;
     line-height: 2em;
