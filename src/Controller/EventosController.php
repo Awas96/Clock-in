@@ -175,7 +175,7 @@ class EventosController extends AbstractController
                 array_push($turnos, $turno);
             }
         }
-        sort($turnos);
+        rsort($turnos);
         return $this->render('eventos/fichar.html.twig', [
             'estado' => $estado,
             'evento' => $fecha,

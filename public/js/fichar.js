@@ -20,7 +20,6 @@ function fichar() {
     }
 }
 
-
 function ajax(url, data = null, callback = null) {
 
     fetch(url, {
@@ -40,15 +39,22 @@ function ajax(url, data = null, callback = null) {
 function fichado() {
     let btnFichar = document.querySelector(".fichar_boton");
 
-    btnFichar.classList.remove("btn-primary");
-    btnFichar.classList.add("btn-danger");
-
-    btnFichar.innerText = "Salir";
-    btnFichar.dataset.state = 1;
-
     let divRestante = document.querySelector("#divRestante");
-    divRestante.id = ""
-    divRestante.innerHTML = "Fichado <i class='fas fa-check'><i/>"
+    divRestante.parentElement.style = "display:none";
+    let p = document.createElement("div");
 
+    if (btnFichar.dataset.state == 0) {
+        btnFichar.classList.remove("btn-primary");
+        btnFichar.classList.add("btn-danger");
+        btnFichar.innerText = "Salir";
+        btnFichar.dataset.state = 1;
+        p.innerHTML = "Salida realizada! <i class='fas fa-check'><i/>"
+    } else {
+        btnFichar.style = "display: none";
+        p.innerHTML = "Entrada Realizada! <i class='fas fa-check'><i/>"
+    }
+
+
+    divRestante.parentElement.parentElement.appendChild(p);
     alert("Fichado correctamente!");
 }

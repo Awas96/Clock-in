@@ -15,7 +15,8 @@
             <p> Turno: </p>
             {% if turnos is not empty %}
                 <p id="turno"
-                   data-hora="{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}"
+                   data-horaInic="{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}"
+                   data-horaFin="{{ turnos[0].horaFin | format_time(locale='es', pattern="HH:mm") }}"
                    data-id="{{ turnos[0].id }}">{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
                     ~ {{ turnos[0].horaFin | format_time(locale='es', pattern="HH:mm") }}
                 </p>
@@ -24,7 +25,9 @@
             {% endif %}
 
         </div>
-        <div id="divRestante"><i class="fas fa-spinner fa-pulse"></i></div>
+        <div>
+            <div id="divRestante"><i class="fas fa-spinner fa-pulse"></i></div>
+        </div>
         <div id="userdata" class="fichar_datos">
             <p>{{ app.user.username }}</p>
             <p>{{ app.user.nif }}</p>
@@ -32,8 +35,8 @@
         </div>
         <div class="fichar_botones">
             {% if turnos is not  empty %}
-            <button class="btn {% if estado == 0 %}btn-primary{% else %}btn-danger{% endif %} fichar_boton"
-                    data-state="{{ estado }}">{% if estado == 0 %}Entrar {% else %} Salir{% endif %} </button>
+                <button disabled class="btn {% if estado == 0 %}btn-primary{% else %}btn-danger{% endif %} fichar_boton"
+                        data-state="{{ estado }}">{% if estado == 0 %}Entrar {% else %} Salir{% endif %} </button>
             {% endif %}
             <a href="{{ path('index') }}" class="btn btn-secondary fichar_boton">Salir</a>
         </div>
