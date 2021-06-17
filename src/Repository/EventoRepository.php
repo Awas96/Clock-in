@@ -50,6 +50,18 @@ class EventoRepository extends ServiceEntityRepository
         return $query;
     }
 
+    public function findByUsDelim($id, $delim)
+    {
+        $query = $this->createQueryBuilder('e')
+            ->andWhere('e.usuario = :val')
+            ->setParameter('val', $id)
+            ->setMaxResults($delim)
+            ->orderBy('e.fecha', 'DESC')
+            ->getQuery()
+            ->getResult();
+        return $query;
+    }
+
     public function findById($value): ?Evento
     {
         return $this->createQueryBuilder('e')

@@ -84,6 +84,25 @@ class EventosController extends AbstractController
         return new Response('Error!', 400);
     }
 
+    /**
+     * @Route("/gestion/incidencias/leer", name="gestiona_incidencias_leer")
+     */
+    public function recogerdelimitado(Request $request, EventoRepository $eventoRepository, TurnoRepository $turnoRepository, FichajeRepository $fichajeRepository): Response
+    {
+        if ($request->isXMLHttpRequest()) {
+            $content = $request->getContent();
+            if (!empty($content)) {
+                $params = json_decode($content, true);
+                $enEventos = ($eventoRepository->findByUsDelim($params["idusuario"], $params["delim"]));
+
+
+
+            }
+            return new JsonResponse($eventos);
+        }
+        return new Response('Error!', 400);
+    }
+
 
     /**
      * @Route("/gestion/horarios/agregar", name="gestiona_horarios_agregar")
@@ -220,6 +239,19 @@ class EventosController extends AbstractController
             return new JsonResponse("Datos guardados correctamente!");
         }
         return new Response('Error!', 400);
+    }
+
+    /**
+     * @Route("/incidencias/todos", name="incidencias_mod")
+     */
+    public function incidencias(UsuarioRepository $usuarioRepository): Response
+    {
+        $usuarios = $usuarioRepository->findAll();
+
+        return $this->render('eventos/incidenciasMod.html.twig', [
+            'usuarios' => $usuarios,
+            'controller_name' => 'EventosController',
+        ]);
     }
 
 

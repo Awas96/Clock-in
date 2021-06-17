@@ -1,0 +1,65 @@
+<div class="container">
+    <h1 class="listados_titulo">Gestión de Incidencias</h1>
+    <div class="row">
+        <div class="col">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div><h3 class="panel-title">Turnos</h3></div>
+                    <div class="pull-right">
+							<span class="clickable filter" data-toggle="tooltip" title="Toggle table filter"
+                                  data-container="body">
+								<i class="fas fa-filter"></i>
+							</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <input type="text" class="form-control" id="dev-table-filter" data-action="filter"
+                           data-filters="#dev-table" placeholder="Filtrar por inicio"/>
+                </div>
+                <div class="panel-table">
+
+                    <div class="incidencias_panel ">
+                        <div class="incidencias_titulo">
+                            <h2>Incidencias de usuario <span id="spanNombreUsuario"></span></h2>
+                        </div>
+                        <form>
+                            <div class="incidencias_inputs">
+
+                                <div><label>Desde: </label><input id="IN_TM_D" type="time" pattern="/[\S\s]+[\S]+/">
+                                </div>
+                                <div><label>Hasta: </label><input id="IN_TM_H" type="time" pattern="/[\S\s]+[\S]+/">
+                                </div>
+                            </div>
+                            <div>
+                                <button id="btnAceptar" type="button" class="btn btn-primary"><i
+                                            class="fas fa-check"></i></button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <table class="table table-hover" id="dev-table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-stripped panel_tabla_tupla_editar">
+                        <tr>
+                            <td colspan="2">Añadir nuevo turno</td>
+                            <td class="">
+                                <button id="btnCrea" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
