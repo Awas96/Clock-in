@@ -35,7 +35,7 @@
         </div>
         <div class="fichar_botones">
             {% if turnos is not  empty %}
-                <button disabled class="btn {% if estado == 0 %}btn-primary{% else %}btn-danger{% endif %} fichar_boton"
+                <button class="btn {% if estado == 0 %}btn-primary{% else %}btn-danger{% endif %} fichar_boton"
                         data-state="{{ estado }}">{% if estado == 0 %}Entrar {% else %} Salir{% endif %} </button>
             {% endif %}
             <a href="{{ path('index') }}" class="btn btn-secondary fichar_boton">Salir</a>
@@ -47,7 +47,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
             integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countdown/2.6.0/countdown.min.js"
+            integrity="sha512-FkM4ZGExuYz4rILLbNzw8f3HxTN9EKdXrQYcYfdluxJBjRLthYPxxZixV/787qjN3JLs2607yN5XknR/cQMU8w=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src="{{ asset('js/cuenta-atras.js') }}"></script>
     <script src="{{ asset('js/reloj.js') }}"></script>
     <script src="{{ asset('js/fichar.js') }}"></script>
 {% endblock %}

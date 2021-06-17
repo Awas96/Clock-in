@@ -95,7 +95,6 @@ class EventosController extends AbstractController
             $content = $request->getContent();
             if (!empty($content)) {
                 $datos = json_decode($content, true);
-                dump($datos);
 
                 foreach ($datos as $params) {
                     dump($params["tipo"]);
@@ -175,7 +174,19 @@ class EventosController extends AbstractController
                 array_push($turnos, $turno);
             }
         }
-        rsort($turnos);
+
+        usort(
+            $turnos,
+            function (Turno $a, Turno $b) {
+                if ($a->getHoraInicio() == $b->getHoraInicio()) {
+                    return 0;
+                }
+                return ($a->getHoraInicio() < $b->getHoraInicio()) ? -1 : 1;
+            }
+        );
+        dump($turnos);
+
+
         return $this->render('eventos/fichar.html.twig', [
             'estado' => $estado,
             'evento' => $fecha,
@@ -200,7 +211,7 @@ class EventosController extends AbstractController
                 $fichaje->setTipo($datos["estado"]);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($fichaje);
-                $em->flush();
+                //$em->flush();
                 dump($fichaje);
 
 
