@@ -85,30 +85,42 @@ class EventosController extends AbstractController
     }
 
     /**
-     * @Route("/gestion/incidencias/leer", name="gestiona_incidencias_leer")
+     * @Route("/gestion/incidencias/leer/delimitado", name="gestiona_incidencias_leer")
      */
     public function recogerdelimitado(Request $request, EventoRepository $eventoRepository, TurnoRepository $turnoRepository, FichajeRepository $fichajeRepository): Response
     {
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
+            $eventos = array();
             if (!empty($content)) {
                 $params = json_decode($content, true);
                 $enEventos = ($eventoRepository->findByUsDelim($params["idusuario"], $params["delim"]));
 
+                foreach ($enEventos as $ev) {
 
+                    $enTurnos = ($turnoRepository->findByEvento($ev->getId()));
+                    $fichajes = $fichajeRepository->findByEvento($ev);
+                    $fichas = array();
+                    if (!empty($fichajes)) {
+                        foreach ($fichajes as $fichaje) {
+                            array_push($fichas, ["id" => $fichaje->getId(), "hora" => $fichaje->getHora(), "tipo" => $fichaje->getTipo()]);
 
+                        }
+                        array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "fichajes" => $fichas]);
+
+                    }
+                }
+                return new JsonResponse($eventos);
             }
-            return new JsonResponse($eventos);
+            return new Response('Error!', 400);
         }
-        return new Response('Error!', 400);
     }
 
 
     /**
      * @Route("/gestion/horarios/agregar", name="gestiona_horarios_agregar")
      */
-    public
-    function agregar(Request $request, UsuarioRepository $usuarioRepository, TurnoRepository $turnoRepository, EventoRepository $eventoRepository, Evento $evento = null, Turno $turno = null): Response
+    public function agregar(Request $request, UsuarioRepository $usuarioRepository, TurnoRepository $turnoRepository, EventoRepository $eventoRepository, Evento $evento = null, Turno $turno = null): Response
     {
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();

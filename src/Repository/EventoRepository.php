@@ -55,8 +55,9 @@ class EventoRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('e')
             ->andWhere('e.usuario = :val')
             ->setParameter('val', $id)
-            ->setMaxResults($delim)
             ->orderBy('e.fecha', 'DESC')
+            ->setFirstResult($delim)
+            ->setMaxResults(20)
             ->getQuery()
             ->getResult();
         return $query;

@@ -23,7 +23,6 @@ function initializeClock(id, endtime) {
         clock.innerHTML ="" + ('0' + t.hours).slice(-2) +":"+ ('0' + t.minutes).slice(-2) +":"+ ('0' + t.seconds).slice(-2);
 
         let btnFichar = document.querySelector(".fichar_boton");
-        console.log(t.hours)
         if(t.hours <= 0 ){
             btnFichar.disabled = false;
         } else {
@@ -36,19 +35,18 @@ function initializeClock(id, endtime) {
     }
 
     updateClock();
-    var timeinterval = setInterval(updateClock, 1000);
+    timeinterval = setInterval(updateClock, 1000);
 }
 
+let timeinterval;
 let fichaje = document.querySelector("#turno")
 
 if( fichaje != null) {
-    console.log(document.querySelector(".fichar_boton").dataset.state == 0)
     if(document.querySelector(".fichar_boton").dataset.state == 0) {
         var fechafichaje = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.horainic)
     } else {
         var fechafichaje = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.horafin)
     }
     var deadline = fechafichaje.toString();
-    console.log(deadline)
     initializeClock('divRestante', deadline);
 }
