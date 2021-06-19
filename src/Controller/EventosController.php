@@ -236,16 +236,15 @@ class EventosController extends AbstractController
             if (!empty($content)) {
                 $datos = json_decode($content, true);
                 $evento = $eventoRepository->findById($datos["id_evento"]);
+                dump($evento);
                 $fichaje = new Fichaje();
-                $fichaje->setHora(new \DateTime(date('Y-m-d h:i:s', strtotime($datos["hora_fichaje"]))));
+                $fichaje->setHora(new \DateTime(date('Y-m-d H:i:s', strtotime($datos["hora_fichaje"]))));
                 $fichaje->setEvento($evento);
                 $fichaje->setTipo($datos["estado"]);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($fichaje);
-                //$em->flush();
+                $em->flush();
                 dump($fichaje);
-
-
             }
 
             return new JsonResponse("Datos guardados correctamente!");

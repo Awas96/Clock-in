@@ -20,16 +20,19 @@ function initializeClock(id, endtime) {
     function updateClock() {
         var t = getTimeRemaining(endtime);
 
-        clock.innerHTML ="" + ('0' + t.hours).slice(-2) +":"+ ('0' + t.minutes).slice(-2) +":"+ ('0' + t.seconds).slice(-2);
+        clock.innerHTML = "" + ('0' + t.hours).slice(-2) + ":" + ('0' + t.minutes).slice(-2) + ":" + ('0' + t.seconds).slice(-2);
 
         let btnFichar = document.querySelector(".fichar_boton");
-        if(t.hours <= 0 ){
-            btnFichar.disabled = false;
-        } else {
-            btnFichar.disabled = true;
+        if (btnFichar.dataset.state == 0) {
+            if (t.hours <= 0) {
+                btnFichar.disabled = false;
+            } else {
+                btnFichar.disabled = true;
+            }
         }
+
         if (t.total <= 0) {
-            clock.innerHTML ="Hora de fichar!"
+            clock.innerHTML = "Hora de fichar!"
             clearInterval(timeinterval);
         }
     }
@@ -41,8 +44,8 @@ function initializeClock(id, endtime) {
 let timeinterval;
 let fichaje = document.querySelector("#turno")
 
-if( fichaje != null) {
-    if(document.querySelector(".fichar_boton").dataset.state == 0) {
+if (fichaje != null) {
+    if (document.querySelector(".fichar_boton").dataset.state == 0) {
         var fechafichaje = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.horainic)
     } else {
         var fechafichaje = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.horafin)

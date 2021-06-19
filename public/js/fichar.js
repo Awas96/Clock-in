@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", main);
 
 function main() {
+    console.log(moment().format("YYYY-MM-DD HH:mm:ss"))
     let btnFichar = document.querySelector(".fichar_boton");
     btnFichar.addEventListener("click", fichar);
     if (document.querySelector("#turno") == null) {

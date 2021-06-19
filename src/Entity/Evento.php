@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=EventoRepository::class)
+ * @ORM\Table(name="evento")
  */
 class Evento
 {

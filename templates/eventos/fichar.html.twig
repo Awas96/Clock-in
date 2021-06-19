@@ -17,7 +17,7 @@
                 <p id="turno"
                    data-horaInic="{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}"
                    data-horaFin="{{ turnos[0].horaFin | format_time(locale='es', pattern="HH:mm") }}"
-                   data-id="{{ turnos[0].id }}">{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
+                   data-id="{{ turnos[0].evento.id }}">{{ turnos[0].horaInicio | format_time(locale='es', pattern="HH:mm") }}
                     ~ {{ turnos[0].horaFin | format_time(locale='es', pattern="HH:mm") }}
                 </p>
             {% else %}

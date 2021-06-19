@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\FichajeRepository;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * @ORM\Entity(repositoryClass=FichajeRepository::class)
+ * @ORM\Table(name="fichaje")
  */
 class Fichaje
 {
@@ -25,6 +27,7 @@ class Fichaje
 
     /**
      * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="fichaje")
+     * @JoinColumn(name="evento_id", referencedColumnName="id", nullable=false)
      */
     private $evento;
 

@@ -74,8 +74,8 @@ function cargarHorarios(datos) {
         let tdSalida = document.createElement("td");
 
         tdFecha.innerText = moment(e.fecha).format("YYYY-MM-DD");
-        tdEntrada.innerText = moment(e.entrada).format("HH:mm");
-        tdSalida.innerText = moment(e.salida).format("HH:mm");
+        tdEntrada.innerText = e.start
+        tdSalida.innerText = e.end
 
         tr.dataset.id = e.id_evento;
         tr.appendChild(tdFecha);
