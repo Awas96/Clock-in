@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let btnGuardar = document.querySelector("#btnGuardar");
     let slctUsuarios = document.querySelector("#selectUsuarios");
     slctUsuarios.selecterIndex = 0;
-
     slctUsuarios.addEventListener("change", function () {
-        cargarEventos(true)
+        cargarEventos(true);
+        cargarventanas(true);
     });
     //  btnGuardar.addEventListener("click", crearModalGuardar);
 
@@ -48,14 +48,22 @@ function cargarEventos(bool) {
     ajax(url, datos, cargarHorarios)
 }
 
-$(window).scroll(function () {
-    if ($(window).scrollTop() + $(window).height() == $(document).height()) {
-        let slctUsuarios = document.querySelector("#selectUsuarios");
-        if (slctUsuarios.selectedIndex != 0) {
-            cargarEventos(false);
-        }
+function cargarventanas(bool) {
+    if (bool) {
+        $(window).bind('scroll', function () {
+            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                let slctUsuarios = document.querySelector("#selectUsuarios");
+                if (slctUsuarios.selectedIndex != 0) {
+                    cargarEventos(false);
+                }
+            }
+        });
+
+    } else {
+        $(window).unbind('scroll');
     }
-});
+
+}
 
 
 function ajax(url, data = null, callback = null) {
@@ -77,7 +85,9 @@ function ajax(url, data = null, callback = null) {
 function cargarHorarios(datos) {
 
     arrDatos = JSON.parse(datos);
-
+    if (arrDatos.length == 0) {
+        cargarventanas(false);
+    }
     let cuerpoTabla = document.querySelector("#incidencias_tabla");
     arrDatos.forEach(function (e) {
 
@@ -88,7 +98,7 @@ function cargarHorarios(datos) {
         let tdIncidencia = document.createElement("td");
 
         tdFecha.innerText = moment(e.fecha).format("YYYY-MM-DD");
-
+        tdFecha.rowSpan = 3;
         tdEntrada.innerText = e.start
         tdSalida.innerText = e.end
 
@@ -106,82 +116,100 @@ function cargarHorarios(datos) {
 
         cuerpoTabla.appendChild(tr)
         cuentaFilas = 1;
-        e.fichajes.forEach(function (ed) {
-            cuentaFilas++;
-            let trFichaje = document.createElement("tr");
-            let tdFichHora = document.createElement("td");
-            let tdFlecha = document.createElement("td");
-            let tdFichTipo = document.createElement("td");
-            let tdFichIncidencia = document.createElement("td");
-            let icono = document.createElement("i");
-
-            tdFecha.rowSpan = 3;
-            icono.classList.add("fas", "fa-level-up-alt", "fa-rotate-90");
-            tdFlecha.appendChild(icono);
-            tdFichHora.innerText = moment(ed.hora.date).format("HH:mm");
+        if (e.fichajes != null) {
+            e.fichajes.forEach(function (ed) {
+                cuentaFilas++;
+                let trFichaje = document.createElement("tr");
+                let tdFichHora = document.createElement("td");
+                let tdFlecha = document.createElement("td");
+                let tdFichTipo = document.createElement("td");
+                let tdFichIncidencia = document.createElement("td");
+                let icono = document.createElement("i");
 
 
-            if (ed.tipo == 0) {
-
-                tdFichTipo.innerText = "Entrada"
-                trFichaje.style = "background-color: rgba(53,143,3,0.2)"
-
-                // Hora de entrada segun el turno
-                let horaEntrada = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdEntrada.innerText))
-                // Hora a la que se ha fichado
-                let horaFichaje = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdFichHora.innerText))
-                horaEntrada.add(20, 'm')
+                icono.classList.add("fas", "fa-level-up-alt", "fa-rotate-90");
+                tdFlecha.appendChild(icono);
+                tdFichHora.innerText = moment(ed.hora.date).format("HH:mm");
 
 
-                if (horaEntrada.unix() <= horaFichaje.unix()) {
-                    tdFichIncidencia.innerText = "Retraso";
-                    tdFichIncidencia.style = "color: rgba(160,0,0,0.8)"
+                if (ed.tipo == 0) {
+
+                    tdFichTipo.innerText = "Entrada"
+                    trFichaje.style = "background-color: rgba(53,143,3,0.2)"
+
+                    // Hora de entrada segun el turno
+                    let horaEntrada = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdEntrada.innerText))
+                    // Hora a la que se ha fichado
+                    let horaFichaje = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdFichHora.innerText))
+                    horaEntrada.add(20, 'm')
+
+
+                    if (horaEntrada.unix() <= horaFichaje.unix()) {
+                        tdFichIncidencia.innerText = "Retraso";
+                        tdFichIncidencia.style = "color: rgba(160,0,0,0.8)"
+                    } else {
+                        tdFichIncidencia.innerText = "Correcto";
+                        tdFichIncidencia.style = "color: rgba(53,143,3,0.8)"
+                    }
+
                 } else {
-                    tdFichIncidencia.innerText = "Correcto";
-                    tdFichIncidencia.style = "color: rgba(53,143,3,0.8)"
+                    tdFichTipo.innerText = "Salida"
+                    trFichaje.style = "background-color: rgba(160,0,0,0.1)"
+
+                    // Hora de salida segun el turno
+                    let horaSalida = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdSalida.innerText))
+                    // Hora a la que se ha fichado
+                    let horaFichaje = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdFichHora.innerText))
+
+                    horaSalida.subtract(20, 'm')
+                    if (horaSalida.unix() >= horaFichaje.unix()) {
+                        tdFichIncidencia.innerText = "Salida antes de tiempo";
+                        tdFichIncidencia.style = "color: rgba(160,0,0,0.8)"
+                    } else {
+                        tdFichIncidencia.innerText = "Correcto";
+                        tdFichIncidencia.style = "color: rgba(53,143,3,0.8)"
+                    }
+
                 }
 
-            } else {
-                tdFichTipo.innerText = "Salida"
-                trFichaje.style = "background-color: rgba(160,0,0,0.1)"
+                trFichaje.dataset.id = ed.id;
+                trFichaje.appendChild(tdFichHora);
+                trFichaje.appendChild(tdFichTipo);
+                trFichaje.appendChild(tdFichIncidencia);
+                cuerpoTabla.appendChild(trFichaje);
+            })
+        }
 
-                // Hora de salida segun el turno
-                let horaSalida = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdSalida.innerText))
-                // Hora a la que se ha fichado
-                let horaFichaje = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdFichHora.innerText))
 
-                horaSalida.subtract(20, 'm')
-                if (horaSalida.unix() >= horaFichaje.unix()) {
-                    tdFichIncidencia.innerText = "Salida antes de tiempo";
-                    tdFichIncidencia.style = "color: rgba(160,0,0,0.8)"
-                } else {
-                    tdFichIncidencia.innerText = "Correcto";
-                    tdFichIncidencia.style = "color: rgba(53,143,3,0.8)"
-                }
-
-            }
-
-            trFichaje.dataset.id = ed.id;
-            trFichaje.appendChild(tdFichHora);
-            trFichaje.appendChild(tdFichTipo);
-            trFichaje.appendChild(tdFichIncidencia);
-            cuerpoTabla.appendChild(trFichaje);
-        })
         if (cuentaFilas <= 2) {
             let fechaEvento = moment(e.fecha);
             let fechaHoy = moment(moment().format("YYYY-MM-DD"));
-
-            console.log(fechaHoy.toDate())
-            console.log(fechaEvento.toDate())
-
             let trSinDatos = document.createElement("tr");
             let tdSinDatos = document.createElement("td");
+
+
             tdSinDatos.colSpan = 3;
-            trSinDatos.style = "background-color: rgba(160,0,0,0.3)"
+
             if (fechaEvento.unix() < fechaHoy.unix()) {
-                tdSinDatos.innerText = "Sin datos";
+                trSinDatos.style = "background-color: rgba(160,0,0,0.3)"
+                if (cuentaFilas < 2) {
+                    tdSinDatos.innerText = "Absentismo";
+                } else {
+                    tdSinDatos.innerText = "Sin Cerrar";
+                }
             } else {
-                tdSinDatos.innerText = "En Proceso";
+                trSinDatos.style = "background-color: rgba(133,133,133,0.1)"
+                if (cuentaFilas < 2) {
+                    tdSinDatos.innerText = "Sin Fichar";
+                } else {
+                    tdSinDatos.innerText = "En Proceso";
+                }
+
+
+            }
+            if (cuentaFilas < 2) {
+                tdFecha.rowSpan = 2;
+
             }
 
             trSinDatos.appendChild(tdSinDatos);
@@ -190,5 +218,5 @@ function cargarHorarios(datos) {
 
     })
 
-    console.log(num)
+
 }

@@ -109,7 +109,6 @@ class EventosController extends AbstractController
                 $enEventos = ($eventoRepository->findByUsDelim($params["idusuario"], $params["delim"]));
 
                 foreach ($enEventos as $ev) {
-
                     $enTurnos = ($turnoRepository->findByEvento($ev->getId()));
                     $fichajes = $fichajeRepository->findByEvento($ev);
                     $fichas = array();
@@ -119,8 +118,10 @@ class EventosController extends AbstractController
 
                         }
                         array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "fichajes" => $fichas]);
-
+                    } else {
+                        array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "fichajes" => null]);
                     }
+
                 }
                 return new JsonResponse($eventos);
             }
