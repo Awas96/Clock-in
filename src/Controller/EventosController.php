@@ -55,10 +55,10 @@ class EventosController extends AbstractController
             $content = $request->getContent();
             if (!empty($content)) {
                 $params = json_decode($content, true);
-                $startDate = \DateTime::createFromFormat('d-n-Y', "01-" . ($params["mes"] - 1) . "-" . $params["anno"]);
+                $startDate = Datetime::createFromFormat('d-n-Y', "01-" . ($params["mes"] - 1) . "-" . $params["anno"]);
                 $startDate->setTime(0, 0, 0);
 
-                $endDate = \DateTime::createFromFormat('d-n-Y', "01-" . ($params["mes"] + 2) . "-" . $params["anno"]);
+                $endDate = Datetime::createFromFormat('d-n-Y', "01-" . ($params["mes"] + 2) . "-" . $params["anno"]);
                 $endDate->setTime(0, 0, 0);
                 $enEventos = ($eventoRepository->findByUsIdAndDates($params["idusuario"], $startDate->format("Y-m-d"), $endDate->format("Y-m-d")));
                 $eventos = array();
@@ -68,13 +68,25 @@ class EventosController extends AbstractController
                     $fichajes = $fichajeRepository->findByEvento($ev);
                     if (!empty($fichajes)) {
                         if (end($fichajes)->getTipo() == 0) {
-                            $title = "En progreso";
+
+                            if ($ev->getFecha() >= new Datetime('today')) {
+                                $title = "En progreso";
+                            } else {
+                                $title = "Sin cerrar";
+                            }
                         } else {
                             $title = "Finalizado";
                         }
                     } else {
-                        $title = "Sin Fichar";
+                        if ($ev->getFecha() >= new Datetime('today')) {
+                            $title = "Sin Fichar";
+                        } else {
+                            $title = "Absentismo";
+                        }
+
                     }
+                    dump($ev->getFecha());
+                    dump(new Datetime('today'));
 
                     array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "id_turno" => $enTurnos->getId(), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "title" => $title]);
                 }
@@ -238,7 +250,7 @@ class EventosController extends AbstractController
                 $evento = $eventoRepository->findById($datos["id_evento"]);
                 dump($evento);
                 $fichaje = new Fichaje();
-                $fichaje->setHora(new \DateTime(date('Y-m-d H:i:s', strtotime($datos["hora_fichaje"]))));
+                $fichaje->setHora(new Datetime(date('Y-m-d H:i:s', strtotime($datos["hora_fichaje"]))));
                 $fichaje->setEvento($evento);
                 $fichaje->setTipo($datos["estado"]);
                 $em = $this->getDoctrine()->getManager();
