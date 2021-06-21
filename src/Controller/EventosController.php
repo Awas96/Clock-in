@@ -331,4 +331,54 @@ class EventosController extends AbstractController
         }
         return new Response('Error!', 400);
     }
+
+    /**
+     * @Route("/incidencia/justificar", name="incidencia_justificar")
+     */
+    public function incidenciaJustificar(Request $request, IncidenciaRepository $incidenciaRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    {
+        if ($request->isXMLHttpRequest()) {
+            $content = $request->getContent();
+            if (!empty($content)) {
+                $datos = json_decode($content, true);
+
+                dump($datos);
+                $incidencia = $incidenciaRepository->findById($datos["id_incidencia"]);
+                $incidencia->setEstado($datos["estado"]);
+                $incidencia->setJustificacion($datos["justificacion"]);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($incidencia);
+                $em->flush();
+            }
+
+            return new JsonResponse("Datos guardados correctamente!");
+        }
+        return new Response('Error!', 400);
+    }
+
+    /**
+     * @Route("/incidencias/usuario", name="incidencias_usuario")
+     */
+    public function incidenciaUsuario(Request $request, IncidenciaRepository $incidenciaRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    {
+        $incidencias = $incidenciaRepository->findByEstadoAndUsuario(1, $this->getUser()->getId());
+        dump($incidencias);
+        return $this->render('incidencias/justificar.html.twig', [
+            'incidencias' => $incidencias,
+        ]);
+    }
+
+
+    /**
+     * @Route("/incidencias/resolver", name="incidencias_resolver")
+     */
+    public function incidenciaResolver(Request $request, IncidenciaRepository $incidenciaRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    {
+        $incidencias = $incidenciaRepository->findByEstadoAndUsuario(2, $this->getUser()->getId());
+        dump($incidencias);
+        return $this->render('incidencias/justificar.html.twig', [
+            'incidencias' => $incidencias,
+        ]);
+    }
+
 }

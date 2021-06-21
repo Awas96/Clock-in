@@ -16,7 +16,7 @@ class PrincipalController extends AbstractController
      */
     public function index(EventoRepository $eventoRepository, IncidenciaRepository $incidenciaRepository, AuthenticationUtils $authenticationUtils): Response
     {
-        $incidencias = $incidenciaRepository->findByEventoAndUsuario($this->getUser()->getId());
+        $incidencias = $incidenciaRepository->findByEstado(1);
         dump($incidencias);
         return $this->render('principal/index.html.twig', [
             'incidencias' => $incidencias,

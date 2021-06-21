@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -36,7 +36,7 @@ class Usuario implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $username;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -93,14 +93,14 @@ class Usuario implements UserInterface
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getName(): ?string
     {
-        return $this->username;
+        return $this->name;
     }
 
-    public function setUsername(string $username): self
+    public function setName(string $name): self
     {
-        $this->username = $username;
+        $this->name = $name;
 
         return $this;
     }
@@ -147,9 +147,7 @@ class Usuario implements UserInterface
                 array_push($role, 'ROLE_EMPLEADO');
                 break;
         }
-
         return $role;
-
     }
 
     public function setRoles($roles): self
@@ -201,7 +199,6 @@ class Usuario implements UserInterface
             $this->evento[] = $evento;
             $evento->setUsuario($this);
         }
-
         return $this;
     }
 
@@ -213,7 +210,12 @@ class Usuario implements UserInterface
                 $evento->setUsuario(null);
             }
         }
-
         return $this;
     }
+
+    public function getUsername()
+    {
+        return $this->name;
+    }
+
 }

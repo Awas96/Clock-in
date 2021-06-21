@@ -33,17 +33,38 @@ class IncidenciaRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByEventoAndUsuario($usuario)
+    public function findByEstadoAndUsuario($estado, $usuario)
     {
         return $this->createQueryBuilder('i')
-            ->andWhere('i.estado = 1')
+            ->andWhere('i.estado = :estado')
             ->andWhere('e.usuario = :user')
             ->leftJoin("i.evento", 'e')
             ->setParameter('user', $usuario)
+            ->setParameter('estado', $estado)
             ->orderBy('i.id', 'DESC')
             ->getQuery()
             ->getResult();
     }
 
+    public function findByEstado($estado)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.estado = :estado')
+            ->leftJoin("i.evento", 'e')
+            ->setParameter('estado', $estado)
+            ->orderBy('i.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function findById($value): ?Incidencia
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
 }
