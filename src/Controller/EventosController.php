@@ -101,7 +101,7 @@ class EventosController extends AbstractController
     /**
      * @Route("/gestion/incidencias/leer/delimitado", name="gestiona_incidencias_leer")
      */
-    public function recogerdelimitado(Request $request, EventoRepository $eventoRepository, TurnoRepository $turnoRepository, FichajeRepository $fichajeRepository): Response
+    public function recogerdelimitado(Request $request, EventoRepository $eventoRepository, IncidenciaRepository $incidenciaRepository, TurnoRepository $turnoRepository, FichajeRepository $fichajeRepository): Response
     {
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
@@ -113,15 +113,20 @@ class EventosController extends AbstractController
                 foreach ($enEventos as $ev) {
                     $enTurnos = ($turnoRepository->findByEvento($ev->getId()));
                     $fichajes = $fichajeRepository->findByEvento($ev);
+                    $incidencias = $incidenciaRepository->findByEvento($ev);
+                    $tieneIncidencias = false;
+                    if (!empty($incidencias)) {
+                        $tieneIncidencias = true;
+                    }
                     $fichas = array();
                     if (!empty($fichajes)) {
                         foreach ($fichajes as $fichaje) {
                             array_push($fichas, ["id" => $fichaje->getId(), "hora" => $fichaje->getHora(), "tipo" => $fichaje->getTipo()]);
 
                         }
-                        array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "fichajes" => $fichas]);
+                        array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "tieneIncidencias" => $tieneIncidencias, "fichajes" => $fichas]);
                     } else {
-                        array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "fichajes" => null]);
+                        array_push($eventos, ["id_evento" => $ev->getId(), "fecha" => $ev->getFecha()->format("Y-m-d"), "start" => $enTurnos->getHoraInicio()->format("H:i"), "end" => $enTurnos->getHoraFin()->format("H:i"), "tieneIncidencias" => $tieneIncidencias, "fichajes" => null]);
                     }
 
                 }
@@ -279,6 +284,7 @@ class EventosController extends AbstractController
             'controller_name' => 'EventosController',
         ]);
     }
+
 
     /**
      * @Route("/incidencia/nueva", name="incidencia_nueva")

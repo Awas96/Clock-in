@@ -137,21 +137,15 @@ function guardarIncidencia(e, tipo) {
     // Estilizamos el boton
     let tdBoton = e.parentElement;
     tdBoton.style = "display: flex;justify-content: space-around;align-items: center;"
-    if (e.dataset.incidencias == null) {
-        e.dataset.incidencias = 1;
-    } else {
-        e.dataset.incidencias = parseInt(e.dataset.incidencias) + 1;
-    }
-    //Le damos el contenido
-    let texto = document.createElement("span");
-    if (tdBoton.childElementCount > 1) {
-        tdBoton.removeChild(tdBoton.children[1]);
-        texto.innerText = "Contiene: " + e.dataset.incidencias;
-        tdBoton.appendChild(texto);
-    } else {
-        texto.innerText = "Contiene: " + e.dataset.incidencias;
-        tdBoton.appendChild(texto);
-    }
+    let btnVerIncidencias = document.createElement("a");
+
+    let hiperenlace = document.createElement("a")
+    hiperenlace.innerText = "Ver Incidencias"
+    hiperenlace.classList.add("btn", "btn-danger");
+    hiperenlace.href = "#";
+    btnVerIncidencias.appendChild(hiperenlace);
+    tdBoton.appendChild(btnVerIncidencias);
+
 
     //Creacion de la incidencia+
     let url = "/eventos/incidencia/nueva";
@@ -161,7 +155,7 @@ function guardarIncidencia(e, tipo) {
         motivo: tipo,
         hora: moment().format("YYYY-MM-DD HH:mm")
     }
-    ajax(url, datos);
+    //ajax(url, datos);
 
 }
 
@@ -237,11 +231,17 @@ function cargarHorarios(datos) {
         let tdEntrada = document.createElement("td");
         let tdSalida = document.createElement("td");
         let tdIncidencia = document.createElement("td");
+        let tdBoton = document.createElement("td");
 
         tdFecha.innerText = moment(e.fecha).format("YYYY-MM-DD");
         tdFecha.rowSpan = 3;
         tdEntrada.innerText = e.start
         tdSalida.innerText = e.end
+
+        let hiperenlace = document.createElement("a")
+        hiperenlace.innerText = "Ver Incidencias"
+        hiperenlace.classList.add("btn", "btn-danger");
+        hiperenlace.href = "#";
 
         let btnIncidencia = document.createElement("button")
         btnIncidencia.innerHTML = "<i class='fas fa-edit'></i>"
@@ -250,14 +250,18 @@ function cargarHorarios(datos) {
         btnIncidencia.addEventListener("click", function () {
             pulsarIncidencia(btnIncidencia);
         });
-        tdIncidencia.appendChild(btnIncidencia);
-
+        tdBoton.style = "display: flex;justify-content: space-around;align-items: center;"
+        tdBoton.appendChild(btnIncidencia);
+        if (e.tieneIncidencias != false) {
+            tdBoton.appendChild(hiperenlace);
+        }
 
         tr.dataset.id = e.id_evento;
         tr.appendChild(tdFecha);
         tr.appendChild(tdEntrada);
         tr.appendChild(tdSalida);
-        tr.appendChild(tdIncidencia);
+        tr.appendChild(tdBoton);
+
 
         cuerpoTabla.appendChild(tr)
         cuentaFilas = 1;
