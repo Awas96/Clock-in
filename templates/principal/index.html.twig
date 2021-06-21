@@ -27,6 +27,11 @@
             </div>
         </div>
         <div class="dpright portada_pnlCuerpo">
+            <div class="portada_notificaciones">
+                {% if incidencias is not empty %}
+                    <p>¡Tienes {{ incidencias | length }} incidencias sin resolver!</p>
+                {% endif %}
+            </div>
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="dpbody portada_pnlCuerpo_seccion">
                     <h2 class="portada_titulo"><i class="fas fa-user-shield"></i> Panel Admin</h2>

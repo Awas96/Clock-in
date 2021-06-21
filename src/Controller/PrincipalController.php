@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\EventoRepository;
+use App\Repository\IncidenciaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,9 +14,12 @@ class PrincipalController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(AuthenticationUtils $authenticationUtils): Response
+    public function index(EventoRepository $eventoRepository, IncidenciaRepository $incidenciaRepository, AuthenticationUtils $authenticationUtils): Response
     {
-
-        return $this->render('principal/index.html.twig');
+        $incidencias = $incidenciaRepository->findByEventoAndUsuario($this->getUser()->getId());
+        dump($incidencias);
+        return $this->render('principal/index.html.twig', [
+            'incidencias' => $incidencias,
+        ]);
     }
 }

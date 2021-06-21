@@ -33,5 +33,17 @@ class IncidenciaRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByEventoAndUsuario($usuario)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.estado = 1')
+            ->andWhere('e.usuario = :user')
+            ->leftJoin("i.evento", 'e')
+            ->setParameter('user', $usuario)
+            ->orderBy('i.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
 }

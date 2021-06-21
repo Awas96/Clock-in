@@ -70,3 +70,13 @@
 .portada_pnlCuerpo_botonera {
 
 }
+
+
+.portada_notificaciones p {
+        margin: 1em;
+        margin-bottom: 0.3em;
+        padding: 1em;
+        background-color: rgba(255, 0, 0, 0.33);
+        border: 3px solid red;
+        border-radius: 15px;
+}
