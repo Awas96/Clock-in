@@ -47,6 +47,17 @@
                                             {{ i.hora | date("m/d/Y H:m") }}
                                         </td>
                                     </tr>
+
+                                    <tr>
+                                        <td colspan="3">
+                                            {% if i.justificacion != "" %}
+                                                {{ i.justificacion }}
+                                            {% else %}
+                                                Sin justificar
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+
                                 {% endfor %}
                                 </tbody>
                             </table>
