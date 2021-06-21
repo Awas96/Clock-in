@@ -1,0 +1,68 @@
+{% extends 'layout.html.twig' %}
+
+{% block estilos %}
+    <link rel="stylesheet" href="{{ asset('css/listados.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tabla.css') }}">
+{% endblock %}
+{% block javascripts %}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1 class="listados_titulo">incidencias para {{ usuario.username }} </h1>
+        <h2 class="listados_titulo"> el turno {{ turno.horaInicio | date("H:m") }} ~ {{ turno.horaFin | date("H:m") }}
+            dia {{ evento.fecha | date("d/m/Y") }} </h2>
+        <div class="row">
+            <div class="col">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div><h3 class="panel-title">Incidencias</h3></div>
+                    </div>
+
+                    <div class="panel-table">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="dev-table">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>Estado</th>
+                                    <th>Motivo</th>
+                                    <th>Fecha</th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-stripped panel_tabla_tupla_editar">
+                                {% for i in incidencias %}
+                                    <tr>
+                                        <td>
+                                            {% if i.estado  == '1' %}
+                                                Activa
+                                            {% elseif i.estado == '2' %}
+                                                Resuelta
+                                            {% elseif i.estado == '3' %}
+                                                Denegada
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{ i.motivo }}
+                                        </td>
+                                        <td>
+                                            {{ i.hora | date("m/d/Y H:m") }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+
+{% endblock %}
+
+{% block title %}
+    Gestión de usuarios
+{% endblock %}
+

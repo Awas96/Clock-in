@@ -142,7 +142,7 @@ function guardarIncidencia(e, tipo) {
     let hiperenlace = document.createElement("a")
     hiperenlace.innerText = "Ver Incidencias"
     hiperenlace.classList.add("btn", "btn-danger");
-    hiperenlace.href = "#";
+    hiperenlace.href = " /eventos/incidencias/ev/" + e.dataset.evento;
     btnVerIncidencias.appendChild(hiperenlace);
     tdBoton.appendChild(btnVerIncidencias);
 
@@ -155,7 +155,7 @@ function guardarIncidencia(e, tipo) {
         motivo: tipo,
         hora: moment().format("YYYY-MM-DD HH:mm")
     }
-    //ajax(url, datos);
+    ajax(url, datos);
 
 }
 
@@ -241,7 +241,7 @@ function cargarHorarios(datos) {
         let hiperenlace = document.createElement("a")
         hiperenlace.innerText = "Ver Incidencias"
         hiperenlace.classList.add("btn", "btn-danger");
-        hiperenlace.href = "#";
+        hiperenlace.href = "/eventos/incidencias/ev/" + e.id_evento;
 
         let btnIncidencia = document.createElement("button")
         btnIncidencia.innerHTML = "<i class='fas fa-edit'></i>"

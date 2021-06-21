@@ -48,4 +48,13 @@ class UsuarioRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findByEvento($value): ?Usuario
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.evento = :value')
+            ->setParameter('value', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 }

@@ -287,6 +287,25 @@ class EventosController extends AbstractController
 
 
     /**
+     * @Route("/incidencias/ev/{id_evento}", name="incidencias_evento")
+     */
+    public function incidenciasDeEvento(EventoRepository $eventoRepository, IncidenciaRepository $incidenciaRepository, UsuarioRepository $usuarioRepository, TurnoRepository $turnoRepository, $id_evento): Response
+    {
+        $evento = $eventoRepository->findById($id_evento);
+        $usuario = $usuarioRepository->findByID($evento->getUsuario());
+        $turno = $turnoRepository->findByEvento($evento);
+        $incidencias = $incidenciaRepository->findByEvento($evento->getId());
+
+        return $this->render('eventos/incidenciasPorEvento.html.twig', [
+            'usuario' => $usuario,
+            'turno' => $turno,
+            'evento' => $evento,
+            'incidencias' => $incidencias,
+            'controller_name' => 'EventosController',
+        ]);
+    }
+
+    /**
      * @Route("/incidencia/nueva", name="incidencia_nueva")
      */
     public function incidenciaNueva(Request $request, IncidenciaRepository $incidenciaRepository, EventoRepository $eventoRepository, $fichaje = null): Response
