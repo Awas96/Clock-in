@@ -1,8 +1,6 @@
 .dpMain {
-
     display: flex;
     min-height: calc(100vh - 6em);
-
 }
 
 .dpleft {

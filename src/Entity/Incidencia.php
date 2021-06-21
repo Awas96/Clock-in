@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\IncidenciaRepository;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,6 +26,16 @@ class Incidencia
      * @ORM\Column(type="string", length=255)
      */
     private $motivo;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $justificacion;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $hora;
 
     /**
      * @ORM\ManyToOne(targetEntity=Evento::class, inversedBy="incidencia")
@@ -61,6 +70,39 @@ class Incidencia
         $this->motivo = $motivo;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHora()
+    {
+        return $this->hora;
+    }
+
+    /**
+     * @param mixed $hora
+     */
+    public function setHora($hora): void
+    {
+        $this->hora = $hora;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getJustificacion()
+    {
+        return $this->justificacion;
+    }
+
+    /**
+     * @param mixed $justificacion
+     */
+    public function setJustificacion($justificacion): void
+    {
+        $this->justificacion = $justificacion;
     }
 
     public function getEvento(): ?Evento

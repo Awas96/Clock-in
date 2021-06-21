@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Evento;
 use App\Entity\Fichaje;
+use App\Entity\Incidencia;
 use App\Entity\Turno;
 use App\Repository\EventoRepository;
 use App\Repository\FichajeRepository;
+use App\Repository\IncidenciaRepository;
 use App\Repository\TurnoRepository;
 use App\Repository\UsuarioRepository;
 use Datetime;
@@ -278,5 +280,30 @@ class EventosController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/incidencia/nueva", name="incidencia_nueva")
+     */
+    public function incidenciaNueva(Request $request, IncidenciaRepository $incidenciaRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    {
+        if ($request->isXMLHttpRequest()) {
+            $content = $request->getContent();
+            if (!empty($content)) {
+                $datos = json_decode($content, true);
+                $evento = $eventoRepository->findById($datos["id_evento"]);
+                dump($datos);
+                $incidencia = new Incidencia();
+                $incidencia->setEvento($evento);
+                $incidencia->setEstado($datos["estado"]);
+                $incidencia->setHora(new Datetime(date('Y-m-d H:i:s', strtotime($datos["hora"]))));
+                $incidencia->setMotivo($datos["motivo"]);
+                $incidencia->setJustificacion("");
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($incidencia);
+                $em->flush();
+            }
 
+            return new JsonResponse("Datos guardados correctamente!");
+        }
+        return new Response('Error!', 400);
+    }
 }
