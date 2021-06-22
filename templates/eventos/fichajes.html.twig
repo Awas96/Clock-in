@@ -1,0 +1,31 @@
+{% extends 'layout.html.twig' %}
+
+{% block estilos %}
+    <link rel="stylesheet" href="{{ asset('css/incidencias.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/listados.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tabla.css') }}">
+{% endblock %}
+
+{% block title %}Carta{% endblock %}
+
+{% block content %}
+
+
+    <div data-id="{{ app.user.id }}" id="incidencias_contenedor" class="incidencias_contenedor">
+
+        <div class="incidencias_contenedor_calendario">
+            {% include 'incidencias/incidencias_partial.html.twig' %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+            integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('js/fichajes_usuario.js') }}"></script>
+    <script src="{{ asset('js/tabla.js') }}"></script>
+
+{% endblock %}

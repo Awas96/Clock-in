@@ -283,6 +283,19 @@ class EventosController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/incidencias/usuario", name="incidencias_usuario")
+     */
+    public function incidenciasUsuario(UsuarioRepository $usuarioRepository): Response
+    {
+        $usuarios = $usuarioRepository->findAll();
+
+        return $this->render('eventos/fichajes.html.twig', [
+            'usuarios' => $usuarios,
+            'controller_name' => 'EventosController',
+        ]);
+    }
+
 
     /**
      * @Route("/incidencias/ev/{id_evento}", name="incidencias_evento")
@@ -411,7 +424,7 @@ class EventosController extends AbstractController
     }
 
     /**
-     * @Route("/historico/incidencias/leer/delimitado", name="gestiona_incidencias_leer")
+     * @Route("/historico/incidencias/leer/delimitado", name="historico_incidencias_leer")
      */
     public function historicoDelimitado(Request $request, UsuarioRepository $usuarioRepository, IncidenciaRepository $incidenciaRepository, TurnoRepository $turnoRepository, FichajeRepository $fichajeRepository): Response
     {
