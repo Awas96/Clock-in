@@ -45,7 +45,7 @@ function fichado() {
     if (btnFichar.dataset.state == 0) {
         btnFichar.classList.remove("btn-primary");
         btnFichar.classList.add("btn-danger");
-        btnFichar.innerText = "Salir";
+        btnFichar.innerText = "Fichar Salida";
         btnFichar.dataset.state = 1;
         fechafichaje = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.horafin)
         var deadline = fechafichaje.toString();

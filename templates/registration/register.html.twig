@@ -3,7 +3,7 @@
 {% block title %}Registrar Usuario{% endblock %}
 
 {% block estilos %}
-    <link rel="stylesheet" href="{{ asset('css/portada.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login_form.css') }}">
 
 {% endblock %}
 
@@ -11,9 +11,9 @@
     {% for flashError in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
-    <div class="portada mt-3">
-        <h1>Registrar Usuario</h1>
-        <div class="portada_cuerpo">
+    <div class="cuerpo cuerpo_register">
+        <h1 class="text-center login-title">Registrar Usuario</h1>
+        <div class="account-wall">
             <div class="portada_fondo ">
                 {{ form_start(registrationForm) }}
                 {{ form_row(registrationForm.username, {

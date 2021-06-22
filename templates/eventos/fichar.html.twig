@@ -36,7 +36,7 @@
         <div class="fichar_botones">
             {% if turnos is not  empty %}
                 <button class="btn {% if estado == 0 %}btn-primary{% else %}btn-danger{% endif %} fichar_boton"
-                        data-state="{{ estado }}">{% if estado == 0 %}Entrar {% else %} Salir{% endif %} </button>
+                        data-state="{{ estado }}">{% if estado == 0 %}Fichar Entrar {% else %} Fichar Salida{% endif %} </button>
             {% endif %}
             <a href="{{ path('index') }}" class="btn btn-secondary fichar_boton">Salir</a>
         </div>

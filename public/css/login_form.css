@@ -1,6 +1,7 @@
 .horarios_contenedor {
     display: flex;
     flex-direction: column;
+    align-items: center;
     height: 100%;
 }
 
@@ -10,12 +11,18 @@
     max-width: 550px;
 }
 
+.cuerpo_register {
+    text-align: center;
+    margin: 0 auto;
+}
+
 .form-signin {
 
     padding: 15px;
     margin: 0 auto;
 }
-.form-input{
+
+.form-input {
     display: flex;
     flex-direction: column;
     align-items: center;
