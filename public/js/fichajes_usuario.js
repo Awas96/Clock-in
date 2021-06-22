@@ -224,16 +224,16 @@ function cargarHorarios(datos) {
 
         tdFecha.innerText = moment(e.fecha).format("YYYY-MM-DD");
         tdFecha.rowSpan = 3;
-        tdEntrada.innerText = e.start
-        tdSalida.innerText = e.end
+        tdEntrada.innerText = e.start;
+        tdSalida.innerText = e.end;
 
-        let hiperenlace = document.createElement("a")
-        hiperenlace.innerText = "Ver Incidencias"
+        let hiperenlace = document.createElement("a");
+        hiperenlace.innerText = "Ver Incidencias";
         hiperenlace.classList.add("btn", "btn-danger");
         hiperenlace.href = "/incidencias/ev/" + e.id_evento;
 
-        let btnIncidencia = document.createElement("button")
-        btnIncidencia.innerHTML = "<i class='fas fa-edit'></i>"
+        let btnIncidencia = document.createElement("button");
+        btnIncidencia.innerHTML = "<i class='fas fa-edit'></i>";
         btnIncidencia.classList.add("btn", "btn-danger");
         btnIncidencia.dataset.evento = e.id_evento;
         btnIncidencia.addEventListener("click", function () {
@@ -270,23 +270,23 @@ function cargarHorarios(datos) {
                     trFichaje.style = "background-color: rgba(53,143,3,0.2)"
 
                     // Hora de entrada segun el turno
-                    let horaEntrada = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdEntrada.innerText))
+                    let horaEntrada = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdEntrada.innerText));
                     // Hora a la que se ha fichado
-                    let horaFichaje = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdFichHora.innerText))
+                    let horaFichaje = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdFichHora.innerText));
                     horaEntrada.add(20, 'm')
 
 
                     if (horaEntrada.unix() <= horaFichaje.unix()) {
                         tdFichIncidencia.innerText = "Retraso";
-                        tdFichIncidencia.style = "color: rgba(160,0,0,0.8)"
+                        tdFichIncidencia.style = "color: rgba(160,0,0,0.8)";
                     } else {
                         tdFichIncidencia.innerText = "Correcto";
-                        tdFichIncidencia.style = "color: rgba(53,143,3,0.8)"
+                        tdFichIncidencia.style = "color: rgba(53,143,3,0.8)";
                     }
 
                 } else {
-                    tdFichTipo.innerText = "Salida"
-                    trFichaje.style = "background-color: rgba(160,0,0,0.1)"
+                    tdFichTipo.innerText = "Salida";
+                    trFichaje.style = "background-color: rgba(160,0,0,0.1)";
 
                     // Hora de salida segun el turno
                     let horaSalida = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdSalida.innerText))

@@ -139,7 +139,7 @@ function guardarIncidencia(e, tipo) {
     tdBoton.style = "display: flex;justify-content: space-around;align-items: center;"
     let btnVerIncidencias = document.createElement("a");
 
-    let hiperenlace = document.createElement("a")
+    let hiperenlace = document.createElement("a");
     hiperenlace.innerText = "Ver Incidencias"
     hiperenlace.classList.add("btn", "btn-danger");
     hiperenlace.href = " /incidencias/ev/" + e.dataset.evento;

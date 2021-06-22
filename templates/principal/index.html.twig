@@ -10,21 +10,20 @@
 {% block content %}
     <div class="dpMain">
         <div id="loggeduser" class="dpleft portada_pnlUsuario">
-            <div id="userimage" class="portada_pnlUsuario_imagen">
-                <figure class=" text-center">
-                    <img src="{{ asset('img/logo.png') }}">
-                    <figcaption>{{ app.user.username }}</figcaption>
-                </figure>
-            </div>
-            <div id="userdata" class="portada_pnlUsuario_datos">
-                <p>Nif: {{ app.user.nif }}</p>
-                <p>Email: {{ app.user.email }}</p>
-                <p>Rol: {{ app.user.roles | first }}</p>
-            </div>
             <div id="controls" class="portada_pnlUsuario_controls">
-                <p> Controles:</p>
                 <a href="{{ path('app_logout') }}" class="btn btn-warning">Desconectar</a>
             </div>
+            <div id="userdata" class="portada_pnlUsuario_datos">
+                <p class="font-weight-bold">Nombre:</p>
+                <p> {{ app.user.username }}</p>
+                <p class="font-weight-bold">Nif: </p>
+                <p>{{ app.user.nif }}</p>
+                <p class="font-weight-bold">Email: </p>
+                <p>{{ app.user.email }}</p>
+                <p class="font-weight-bold">Rol:</p>
+                <p> {{ app.user.roles | first }}</p>
+            </div>
+
         </div>
         <div class="dpright portada_pnlCuerpo">
             <div class="portada_notificaciones">
@@ -36,7 +35,9 @@
                 <div class="dpbody portada_pnlCuerpo_seccion">
                     <h2 class="portada_titulo"><i class="fas fa-user-shield"></i> Panel Admin</h2>
                     <div class="portada_pnlCuerpo_botonera">
-                        <a href="{{ path('usuarios_listar') }}" class="btn btn-light"> Gestionar Usuarios</a>
+                        <a href="{{ path('usuarios_listar') }}" class="btn btn-light botonIndex"> Listado de
+                            Usuarios</a>
+                        <a href="{{ path('app_register') }}" class="btn btn-light botonIndex"> Crear nuevo Usuario</a>
                     </div>
                 </div>
             {% endif %}
@@ -44,13 +45,17 @@
                 <div class="dpbody portada_pnlCuerpo_seccion">
                     <h2 class="portada_titulo"><i class="fas fa-user-cog"></i> Panel Moderador</h2>
                     <div class="portada_pnlCuerpo_botonera">
-                        <a href="{{ path('gestiona_horarios') }}" class="btn btn-light"> Gestionar Horarios</a>
-                        <a href="{{ path('turnos_predefinidos_listar') }}" class="btn btn-light"> Crear Plantilla
+                        <a href="{{ path('turnos_predefinidos_listar') }}" class="btn btn-light botonIndex"> Crear
+                            Plantilla
                             Horarios</a>
-                        <a href="{{ path('incidencias_mod') }}" class="btn btn-light"> Ver Historial de Fichajes</a>
-                        <a href="{{ path('incidencias_resoluciones') }}" class="btn btn-light"> Resolver
+                        <a href="{{ path('gestiona_horarios') }}" class="btn btn-light botonIndex"> Gestionar
+                            Horarios</a>
+                        <a href="{{ path('incidencias_mod') }}" class="btn btn-light botonIndex"> Ver Historial de
+                            Fichajes</a>
+                        <a href="{{ path('incidencias_resoluciones') }}" class="btn btn-light botonIndex"> Resolver
                             justifiación</a>
-                        <a href="{{ path('incidencias_usuario_finalizadas_MOD') }}" class="btn btn-light"> ver histórico
+                        <a href="{{ path('incidencias_usuario_finalizadas_MOD') }}" class="btn btn-light botonIndex">
+                            Ver Historial
                             de incidencias</a>
                     </div>
                 </div>
@@ -59,13 +64,16 @@
                 <div class="dpbody portada_pnlCuerpo_seccion">
                     <h2 class="portada_titulo"><i class="fas fa-user"></i> Panel Empleado</h2>
                     <div class="portada_pnlCuerpo_botonera">
-                        <a href="{{ path('gestiona_horario_personal') }}" class="btn btn-light"> Ver Turnos</a>
-                        <a href="{{ path('fichar') }}" class="btn btn-light"> Fichar</a>
-                        <a href="{{ path('incidencias_usuario_activas') }}" class="btn btn-light"> Justificar
+                        <a href="{{ path('gestiona_horario_personal') }}" class="btn btn-light botonIndex"> Ver
+                            Turnos</a>
+                        <a href="{{ path('fichar') }}" class="btn btn-light botonIndex"> Fichar</a>
+                        <a href="{{ path('incidencias_usuario_activas') }}" class="btn btn-light botonIndex"> Justificar
                             Incidencias</a>
-                        <a href="{{ path('incidencias_usuario_finalizadas') }}" class="btn btn-light"> Ver histórico de
+                        <a href="{{ path('incidencias_usuario_finalizadas') }}" class="btn btn-light botonIndex"> Ver
+                            Historial de
                             incidencias</a>
-                        <a href="{{ path('incidencias_usuario') }}" class="btn btn-light"> Ver histórico de Fichajes</a>
+                        <a href="{{ path('incidencias_usuario') }}" class="btn btn-light botonIndex"> Ver histórico de
+                            Fichajes</a>
 
                     </div>
                 </div>

@@ -370,7 +370,7 @@ class EventosController extends AbstractController
     }
 
     /**
-     * @Route("/incidencias/usuario", name="incidencias_usuario_activas")
+     * @Route("/incidencias/justificar/usuario", name="incidencias_usuario_activas")
      */
     public function incidenciaUsuarioAceotptadas(IncidenciaRepository $incidenciaRepository): Response
     {
@@ -414,7 +414,7 @@ class EventosController extends AbstractController
 
         $datos = array();
         foreach ($incidencias as $in) {
-            $usuario = $in->getEvento()->getUsuario()->getName();
+            $usuario = $in->getEvento()->getUsuario()->getUsername();
             array_push($datos, ['id_incidencia' => $in->getId(), 'motivo' => $in->getMotivo(), 'justificacion' => $in->getJustificacion(), 'hora' => $in->getHora(), 'evento' => $in->getEvento(), 'nombreUsuario' => $usuario]);
         }
         dump($datos);

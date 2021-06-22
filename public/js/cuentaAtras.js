@@ -42,13 +42,13 @@ function initializeClock(id, endtime) {
 }
 
 let timeinterval;
-let fichaje = document.querySelector("#turno")
+let fichaje = document.querySelector("#turno");
 
 if (fichaje != null) {
     if (document.querySelector(".fichar_boton").dataset.state == 0) {
-        var fechafichaje = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.horainic)
+        var fechafichaje = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.horainic);
     } else {
-        var fechafichaje = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.horafin)
+        var fechafichaje = new Date(moment().format("YYYY-MM-DD") + " " + document.querySelector("#turno").dataset.horafin);
     }
     var deadline = fechafichaje.toString();
     initializeClock('divRestante', deadline);
