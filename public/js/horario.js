@@ -114,7 +114,7 @@ function limpiaModal() {
 function cargarEventos() {
     num = 0;
     eventos = []
-    let url = "/eventos/gestion/horarios/leer";
+    let url = "/gestion/horarios/leer";
     let datos = {
         idusuario: document.querySelector("#calendar").dataset.userId,
         mes: (calendar.getDate().getMonth() + 1),

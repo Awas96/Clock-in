@@ -361,7 +361,7 @@ function cargarEventos() {
     let btnGuardar = document.querySelector("#btnGuardar").disabled = true;
     let slctUsuarios = document.querySelector("#selectUsuarios");
     slctUsuarios.disabled = false;
-    let url = "/eventos/gestion/horarios/leer";
+    let url = "/gestion/horarios/leer";
     let datos = {
         idusuario: slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId,
         mes: (calendar.getDate().getMonth() + 1),
@@ -375,7 +375,7 @@ function guardarDatos() {
     let select = document.querySelector("#selectUsuarios").disabled = false;
     if (eventos.length > 0) {
         let idusuario = document.querySelector("#selectUsuarios")[document.querySelector("#selectUsuarios").selectedIndex].dataset.usuarioId;
-        let url = "/eventos/gestion/horarios/agregar"
+        let url = "/gestion/horarios/agregar"
         let datos = []
         eventos.forEach(function (e) {
             if (e.save !== "false") {

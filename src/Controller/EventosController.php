@@ -18,9 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/eventos", name="eventos_")
- */
+
 class EventosController extends AbstractController
 {
     /**
@@ -249,7 +247,7 @@ class EventosController extends AbstractController
     /**
      * @Route("/fichaje/nuevo", name="fichar_nuevo")
      */
-    public function fichar(Request $request, FichajeRepository $fichajeRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    public function fichar(Request $request, EventoRepository $eventoRepository, $fichaje = null): Response
     {
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
@@ -279,7 +277,7 @@ class EventosController extends AbstractController
     {
         $usuarios = $usuarioRepository->findAll();
 
-        return $this->render('eventos/incidenciasMod.html.twig', [
+        return $this->render('eventos/fichajesMod.html.twig', [
             'usuarios' => $usuarios,
             'controller_name' => 'EventosController',
         ]);
@@ -308,7 +306,7 @@ class EventosController extends AbstractController
     /**
      * @Route("/incidencia/nueva", name="incidencia_nueva")
      */
-    public function incidenciaNueva(Request $request, IncidenciaRepository $incidenciaRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    public function incidenciaNueva(Request $request, EventoRepository $eventoRepository): Response
     {
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
@@ -335,7 +333,7 @@ class EventosController extends AbstractController
     /**
      * @Route("/incidencia/justificar", name="incidencia_justificar")
      */
-    public function incidenciaJustificar(Request $request, IncidenciaRepository $incidenciaRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    public function incidenciaJustificar(Request $request, IncidenciaRepository $incidenciaRepository): Response
     {
         if ($request->isXMLHttpRequest()) {
             $content = $request->getContent();
@@ -345,7 +343,9 @@ class EventosController extends AbstractController
                 dump($datos);
                 $incidencia = $incidenciaRepository->findById($datos["id_incidencia"]);
                 $incidencia->setEstado($datos["estado"]);
-                $incidencia->setJustificacion($datos["justificacion"]);
+                if ($datos["estado"] == 2) {
+                    $incidencia->setJustificacion($datos["justificacion"]);
+                }
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($incidencia);
                 $em->flush();
@@ -357,9 +357,9 @@ class EventosController extends AbstractController
     }
 
     /**
-     * @Route("/incidencias/usuario", name="incidencias_usuario")
+     * @Route("/incidencias/usuario", name="incidencias_usuario_activas")
      */
-    public function incidenciaUsuario(Request $request, IncidenciaRepository $incidenciaRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    public function incidenciaUsuarioAceotptadas(IncidenciaRepository $incidenciaRepository): Response
     {
         $incidencias = $incidenciaRepository->findByEstadoAndUsuario(1, $this->getUser()->getId());
         dump($incidencias);
@@ -368,17 +368,71 @@ class EventosController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/incidencias/historico", name="incidencias_usuario_finalizadas_MOD")
+     */
+    public function incidenciaUsuarioFinalizadasMod(UsuarioRepository $usuarioRepository): Response
+    {
+        $usuarios = $usuarioRepository->findAll();
+
+        return $this->render('incidencias/historico_mod.html.twig', [
+            'usuarios' => $usuarios,
+        ]);
+    }
 
     /**
-     * @Route("/incidencias/resolver", name="incidencias_resolver")
+     * @Route("/incidencias/historico/usuario", name="incidencias_usuario_finalizadas")
      */
-    public function incidenciaResolver(Request $request, IncidenciaRepository $incidenciaRepository, EventoRepository $eventoRepository, $fichaje = null): Response
+    public function incidenciaUsuarioFinalizadas(IncidenciaRepository $incidenciaRepository): Response
     {
-        $incidencias = $incidenciaRepository->findByEstadoAndUsuario(2, $this->getUser()->getId());
-        dump($incidencias);
-        return $this->render('incidencias/justificar.html.twig', [
+        $incidencias = $incidenciaRepository->findByEstadoAndUsuario(3, $this->getUser()->getId());
+
+        return $this->render('incidencias/historico.html.twig', [
             'incidencias' => $incidencias,
         ]);
     }
+
+    /**
+     * @Route("/incidencias/resoluciones", name="incidencias_resoluciones")
+     */
+    public function incidenciaResolucion(Request $request, IncidenciaRepository $incidenciaRepository, UsuarioRepository $usuarioRepository): Response
+    {
+        $incidencias = $incidenciaRepository->findByEstado(2);
+
+        $datos = array();
+        foreach ($incidencias as $in) {
+            $usuario = $in->getEvento()->getUsuario()->getName();
+            array_push($datos, ['id_incidencia' => $in->getId(), 'motivo' => $in->getMotivo(), 'justificacion' => $in->getJustificacion(), 'hora' => $in->getHora(), 'evento' => $in->getEvento(), 'nombreUsuario' => $usuario]);
+        }
+        dump($datos);
+        return $this->render('incidencias/resolver.html.twig', [
+            'incidencias' => $datos,
+        ]);
+    }
+
+    /**
+     * @Route("/historico/incidencias/leer/delimitado", name="gestiona_incidencias_leer")
+     */
+    public function historicoDelimitado(Request $request, UsuarioRepository $usuarioRepository, IncidenciaRepository $incidenciaRepository, TurnoRepository $turnoRepository, FichajeRepository $fichajeRepository): Response
+    {
+        if ($request->isXMLHttpRequest()) {
+            $content = $request->getContent();
+            $arrIncidencias = array();
+            if (!empty($content)) {
+                $params = json_decode($content, true);
+                $usuario = $usuarioRepository->findByID($params["idusuario"]);
+                $incidencias = $incidenciaRepository->findByEstadoAndUsuarioDelim(3, $usuario, $params["delim"]);
+                dump($incidencias);
+                foreach ($incidencias as $in) {
+
+                    array_push($arrIncidencias, ["hora" => $in->getHora()->format("Y-m-d"), "motivo" => $in->getMotivo(), "justificacion" => $in->getJustificacion()]);
+                }
+
+            }
+            return new JsonResponse($arrIncidencias);
+        }
+        return new Response('Error!', 400);
+    }
+
 
 }

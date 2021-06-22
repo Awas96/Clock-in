@@ -11,7 +11,7 @@ function main() {
 
 function fichar() {
     if (document.querySelector("#turno") != null) {
-        let url = "/eventos/fichaje/nuevo";
+        let url = "/fichaje/nuevo";
         data = {
             id_evento: document.querySelector("#turno").dataset.id,
             hora_fichaje: moment().format("YYYY-MM-DD HH:mm:ss"),

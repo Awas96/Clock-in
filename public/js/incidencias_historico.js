@@ -142,13 +142,13 @@ function guardarIncidencia(e, tipo) {
     let hiperenlace = document.createElement("a")
     hiperenlace.innerText = "Ver Incidencias"
     hiperenlace.classList.add("btn", "btn-danger");
-    hiperenlace.href = " /eventos/incidencias/ev/" + e.dataset.evento;
+    hiperenlace.href = " /incidencias/ev/" + e.dataset.evento;
     btnVerIncidencias.appendChild(hiperenlace);
     tdBoton.appendChild(btnVerIncidencias);
 
 
     //Creacion de la incidencia+
-    let url = "/eventos/incidencia/nueva";
+    let url = "/incidencia/nueva";
     let datos = {
         id_evento: e.dataset.evento,
         estado: 1,
@@ -168,6 +168,7 @@ function cargarventanas(bool) {
                 let slctUsuarios = document.querySelector("#selectUsuarios");
                 if (slctUsuarios.selectedIndex != 0) {
                     cargarEventos(false);
+                    console.log(num)
                 }
             }
         });
@@ -191,13 +192,13 @@ function cargarEventos(bool) {
     let slctUsuarios = document.querySelector("#selectUsuarios");
 
     slctUsuarios.disabled = false;
-    let url = "/eventos/gestion/incidencias/leer/delimitado";
+    let url = "/historico/incidencias/leer/delimitado";
     let datos = {
         idusuario: slctUsuarios[slctUsuarios.selectedIndex].dataset.usuarioId,
         delim: num
     }
     num += 20;
-    ajax(url, datos, cargarHorarios)
+    ajax(url, datos, cargarIncidencias)
 }
 
 function ajax(url, data = null, callback = null) {
@@ -217,9 +218,10 @@ function ajax(url, data = null, callback = null) {
 }
 
 /* funciones post ajax*/
-function cargarHorarios(datos) {
+function cargarIncidencias(datos) {
 
     arrDatos = JSON.parse(datos);
+    console.log(arrDatos)
     if (arrDatos.length == 0) {
         cargarventanas(false);
     }
@@ -228,144 +230,19 @@ function cargarHorarios(datos) {
 
         let tr = document.createElement("tr");
         let tdFecha = document.createElement("td");
-        let tdEntrada = document.createElement("td");
-        let tdSalida = document.createElement("td");
-        let tdIncidencia = document.createElement("td");
-        let tdBoton = document.createElement("td");
+        let tdMotivo = document.createElement("td");
+        let tdJustificacion = document.createElement("td");
 
-        tdFecha.innerText = moment(e.fecha).format("YYYY-MM-DD");
-        tdFecha.rowSpan = 3;
-        tdEntrada.innerText = e.start
-        tdSalida.innerText = e.end
+        tdFecha.innerText = e.hora;
+        tdMotivo.innerText = e.motivo;
+        tdJustificacion.innerText = e.justificacion;
 
-        let hiperenlace = document.createElement("a")
-        hiperenlace.innerText = "Ver Incidencias"
-        hiperenlace.classList.add("btn", "btn-danger");
-        hiperenlace.href = "/eventos/incidencias/ev/" + e.id_evento;
 
-        let btnIncidencia = document.createElement("button")
-        btnIncidencia.innerHTML = "<i class='fas fa-edit'></i>"
-        btnIncidencia.classList.add("btn", "btn-danger");
-        btnIncidencia.dataset.evento = e.id_evento;
-        btnIncidencia.addEventListener("click", function () {
-            pulsarIncidencia(btnIncidencia);
-        });
-        tdBoton.style = "display: flex;justify-content: space-around;align-items: center;"
-        tdBoton.appendChild(btnIncidencia);
-        if (e.tieneIncidencias != false) {
-            tdBoton.appendChild(hiperenlace);
-        }
-
-        tr.dataset.id = e.id_evento;
         tr.appendChild(tdFecha);
-        tr.appendChild(tdEntrada);
-        tr.appendChild(tdSalida);
-        tr.appendChild(tdBoton);
-
-
-        cuerpoTabla.appendChild(tr)
-        cuentaFilas = 1;
-        if (e.fichajes != null) {
-            e.fichajes.forEach(function (ed) {
-                cuentaFilas++;
-                let trFichaje = document.createElement("tr");
-                let tdFichHora = document.createElement("td");
-                let tdFlecha = document.createElement("td");
-                let tdFichTipo = document.createElement("td");
-                let tdFichIncidencia = document.createElement("td");
-                let icono = document.createElement("i");
-
-
-                icono.classList.add("fas", "fa-level-up-alt", "fa-rotate-90");
-                tdFlecha.appendChild(icono);
-                tdFichHora.innerText = moment(ed.hora.date).format("HH:mm");
-
-
-                if (ed.tipo == 0) {
-
-                    tdFichTipo.innerText = "Entrada"
-                    trFichaje.style = "background-color: rgba(53,143,3,0.2)"
-
-                    // Hora de entrada segun el turno
-                    let horaEntrada = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdEntrada.innerText))
-                    // Hora a la que se ha fichado
-                    let horaFichaje = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdFichHora.innerText))
-                    horaEntrada.add(20, 'm')
-
-
-                    if (horaEntrada.unix() <= horaFichaje.unix()) {
-                        tdFichIncidencia.innerText = "Retraso";
-                        tdFichIncidencia.style = "color: rgba(160,0,0,0.8)"
-                    } else {
-                        tdFichIncidencia.innerText = "Correcto";
-                        tdFichIncidencia.style = "color: rgba(53,143,3,0.8)"
-                    }
-
-                } else {
-                    tdFichTipo.innerText = "Salida"
-                    trFichaje.style = "background-color: rgba(160,0,0,0.1)"
-
-                    // Hora de salida segun el turno
-                    let horaSalida = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdSalida.innerText))
-                    // Hora a la que se ha fichado
-                    let horaFichaje = moment(Date.parse(moment().format("YYYY-MM-DD") + " " + tdFichHora.innerText))
-
-                    horaSalida.subtract(20, 'm')
-                    if (horaSalida.unix() >= horaFichaje.unix()) {
-                        tdFichIncidencia.innerText = "Salida antes de tiempo";
-                        tdFichIncidencia.style = "color: rgba(160,0,0,0.8)"
-                    } else {
-                        tdFichIncidencia.innerText = "Correcto";
-                        tdFichIncidencia.style = "color: rgba(53,143,3,0.8)"
-                    }
-
-                }
-
-                trFichaje.dataset.id = ed.id;
-                trFichaje.appendChild(tdFichHora);
-                trFichaje.appendChild(tdFichTipo);
-                trFichaje.appendChild(tdFichIncidencia);
-                cuerpoTabla.appendChild(trFichaje);
-            })
-        }
-
-
-        if (cuentaFilas <= 2) {
-            let fechaEvento = moment(e.fecha);
-            let fechaHoy = moment(moment().format("YYYY-MM-DD"));
-            let trSinDatos = document.createElement("tr");
-            let tdSinDatos = document.createElement("td");
-
-
-            tdSinDatos.colSpan = 3;
-
-            if (fechaEvento.unix() < fechaHoy.unix()) {
-                trSinDatos.style = "background-color: rgba(160,0,0,0.3)"
-                if (cuentaFilas < 2) {
-                    tdSinDatos.innerText = "Absentismo";
-                } else {
-                    tdSinDatos.innerText = "Sin Cerrar";
-                }
-            } else {
-                trSinDatos.style = "background-color: rgba(133,133,133,0.1)"
-                if (cuentaFilas < 2) {
-                    tdSinDatos.innerText = "Sin Fichar";
-                } else {
-                    tdSinDatos.innerText = "En Proceso";
-                }
-
-
-            }
-            if (cuentaFilas < 2) {
-                tdFecha.rowSpan = 2;
-
-            }
-
-            trSinDatos.appendChild(tdSinDatos);
-            cuerpoTabla.appendChild(trSinDatos);
-        }
-
-    })
+        tr.appendChild(tdMotivo);
+        tr.appendChild(tdJustificacion);
+        cuerpoTabla.appendChild(tr);
+    });
 
 
 }

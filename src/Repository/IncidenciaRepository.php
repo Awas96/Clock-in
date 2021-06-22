@@ -46,6 +46,20 @@ class IncidenciaRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByEstadoAndUsuarioDelim($estado, $usuario, $delim)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.estado = :estado')
+            ->andWhere('e.usuario = :user')
+            ->leftJoin("i.evento", 'e')
+            ->setFirstResult($delim)
+            ->setParameter('user', $usuario)
+            ->setParameter('estado', $estado)
+            ->orderBy('i.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findByEstado($estado)
     {
         return $this->createQueryBuilder('i')

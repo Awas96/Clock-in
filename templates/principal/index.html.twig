@@ -44,11 +44,14 @@
                 <div class="dpbody portada_pnlCuerpo_seccion">
                     <h2 class="portada_titulo"><i class="fas fa-user-cog"></i> Panel Moderador</h2>
                     <div class="portada_pnlCuerpo_botonera">
-                        <a href="{{ path('eventos_gestiona_horarios') }}" class="btn btn-light"> Gestionar Horarios</a>
+                        <a href="{{ path('gestiona_horarios') }}" class="btn btn-light"> Gestionar Horarios</a>
                         <a href="{{ path('turnos_predefinidos_listar') }}" class="btn btn-light"> Crear Plantilla
                             Horarios</a>
-                        <a href="{{ path('eventos_incidencias_mod') }}" class="btn btn-light"> Ver Historial de
-                            Eventos</a>
+                        <a href="{{ path('incidencias_mod') }}" class="btn btn-light"> Ver Historial de Fichajes</a>
+                        <a href="{{ path('incidencias_resoluciones') }}" class="btn btn-light"> Resolver
+                            justifiación</a>
+                        <a href="{{ path('incidencias_usuario_finalizadas_MOD') }}" class="btn btn-light"> ver histórico
+                            de incidencias</a>
                     </div>
                 </div>
             {% endif %}
@@ -56,10 +59,12 @@
                 <div class="dpbody portada_pnlCuerpo_seccion">
                     <h2 class="portada_titulo"><i class="fas fa-user"></i> Panel Empleado</h2>
                     <div class="portada_pnlCuerpo_botonera">
-                        <a href="{{ path('eventos_gestiona_horario_personal') }}" class="btn btn-light"> Ver Turnos</a>
-                        <a href="{{ path('eventos_fichar') }}" class="btn btn-light"> Fichar</a>
-                        <a href="{{ path('eventos_incidencias_usuario') }}" class="btn btn-light"> Justificar
+                        <a href="{{ path('gestiona_horario_personal') }}" class="btn btn-light"> Ver Turnos</a>
+                        <a href="{{ path('fichar') }}" class="btn btn-light"> Fichar</a>
+                        <a href="{{ path('incidencias_usuario_activas') }}" class="btn btn-light"> Justificar
                             Incidencias</a>
+                        <a href="{{ path('incidencias_usuario_finalizadas') }}" class="btn btn-light"> Ver histórico de
+                            incidencias</a>
                         <button class="btn btn-light"> Ver histórico de fichajes</button>
                     </div>
                 </div>

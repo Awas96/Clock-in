@@ -1,0 +1,66 @@
+{% extends 'layout.html.twig' %}
+
+{% block estilos %}
+    <link rel="stylesheet" href="{{ asset('css/incidencias.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/listados.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tabla.css') }}">
+{% endblock %}
+
+{% block title %}Carta{% endblock %}
+
+{% block content %}
+
+
+    <div class="incidencias_contenedor">
+
+        <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;"
+             aria-hidden="true" aria-modal="true" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal-title">
+
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="incidencias_contenedor_cabecera">
+            <div>
+                <p>Selecciona Usuario</p>
+                <select id="selectUsuarios">
+                    <option data-usuario-id="null" selected="selected" disabled>Selecciona un usuario</option>
+                    {% for i in usuarios %}
+                        <option data-usuario-id="{{ i.id }}"
+                                data-usuario-username="{{ i.username }}">{{ i.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+        </div>
+        <div class="incidencias_contenedor_calendario">
+            {% include 'incidencias/historico_partial.html.twig' %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+            integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('js/incidencias_historico.js') }}"></script>
+    <script src="{{ asset('js/tabla.js') }}"></script>
+
+{% endblock %}

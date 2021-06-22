@@ -3,11 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     botonesJustificar.forEach(function (e) {
         e.addEventListener("click", function () {
-            crearModalIncidencia(e);
+            crearModalResolucion(e);
         })
-
     })
-
 });
 
 /*Funciones para el modal*/
@@ -52,22 +50,24 @@ function crearModalMensaje(cabecera, mensaje, btnmsg1 = "Aceptar", btnmsg2 = nul
 
 }
 
-function crearModalIncidencia(e) {
+function crearModalResolucion(e) {
     limpiaModal();
     let ok = false;
     /*Titulo*/
-    document.querySelector(".modal-title").innerText = "¿Crear incidencia?";
+    document.querySelector(".modal-title").innerText = "¿Quiere aceptar esta justificacion?";
     /*Cuerpo*/
     let cuerpo = document.querySelector(".modal-body");
     cuerpo.style = "display: flex; flex-direction: column;align-items: center;line-height: 2em;";
     let titulo = document.createElement("p");
-    let textField = document.createElement("textarea");
-    textField.style = "width: 99%; height: 5em;";
+    let justificacion = document.createElement("p");
+    let trIncidencia = e.parentElement.parentElement;
+    let motivo = trIncidencia.children[0];
 
-    titulo.innerText = "Especifique el motivo para justificar la incidencia";
+    titulo.innerText = "Aceptar la siguiente justificacion: ";
+    justificacion.innerText = motivo.innerText;
 
     cuerpo.appendChild(titulo);
-    cuerpo.appendChild(textField);
+    cuerpo.appendChild(justificacion);
 
     /*Pie*/
     let footer = document.querySelector(".modal-footer");
@@ -80,7 +80,7 @@ function crearModalIncidencia(e) {
     btnAceptar.dataset.dismiss = "modal";
     btnAceptar.textContent = "Aceptar"
     btnAceptar.addEventListener("click", function () {
-        guardarIncidencia(e, textField.value);
+        guardarIncidencia(e, justificacion.value);
 
     })
     footer.appendChild(btnCancelar);
@@ -91,7 +91,7 @@ function crearModalIncidencia(e) {
 
 /* Funciones para el manejo de las incidencias para guardar */
 function pulsarIncidencia(e) {
-    crearModalIncidencia(e);
+    crearModalResolucion(e);
     $('#Modal').modal()
 }
 
@@ -100,8 +100,7 @@ function guardarIncidencia(e, motivo) {
     let url = "/incidencia/justificar";
     let datos = {
         id_incidencia: e.dataset.id,
-        estado: 2,
-        justificacion: motivo,
+        estado: 3,
     }
     ajax(url, datos, escribirIncidencia);
     crearModalMensaje("Alerta", "Datos introducidos Correctamente!");
@@ -128,13 +127,10 @@ function ajax(url, data = null, callback = null) {
 /* funciones post ajax*/
 
 function escribirIncidencia(mensaje, datos) {
-
-
-    $('#Modal').modal()
+    console.log(datos);
     let target = document.querySelector("button[data-id='" + datos.id_incidencia + "']");
     let trIncidencia = target.parentElement.parentElement;
     let trMotivo = trIncidencia.children[0];
-    trMotivo.innerText = datos.justificacion;
     target.hidden = true;
 
 }
